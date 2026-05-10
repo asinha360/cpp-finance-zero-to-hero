@@ -1,64 +1,111 @@
-# General Workflow Workspace
+# cpp-finance-zero-to-hero
 
-A reusable VS Code workspace that gives Claude **persistent project memory**. Open this folder in Claude Code and Claude will already know who it's working for, what good output looks like, and which workflow to follow — without re-explanation.
+A 16-week self-study curriculum: zero coding background to employable-level C++ for quantitative finance.
 
-## Core principle
+Every week produces a runnable C++ artifact — a pricer, a backtester, a market-data parser — built from scratch, reviewed as a senior would review it, and tested against acceptance criteria before moving on.
 
-> **The folder is memory. The prompt is direction.**
+---
 
-Files in this workspace persist across sessions. Use them to encode anything Claude should know on day 100 that you'd otherwise have to re-explain. Use prompts only for the immediate task.
+## Goal
 
-## File map
+By week 16: three polished GitHub portfolio projects demonstrating pricing, risk modelling, and market-microstructure topics that could survive a quant developer interview.
+
+By week 4 (already done): write, compile, and debug a Black-Scholes pricer from scratch.
+
+---
+
+## Curriculum
+
+| Week | Topic | Artifact | Status |
+|------|-------|----------|--------|
+| 1 | Toolchain; present-value calculator | [projects/week01/pv.cpp](projects/week01/pv.cpp) | Complete |
+| 2 | Functions + control flow; bond pricer | [projects/week02/bond_pricer.cpp](projects/week02/bond_pricer.cpp) | Complete |
+| 3 | Collections + summary statistics; returns stats tool | [projects/week03/price_series.cpp](projects/week03/price_series.cpp) | Complete |
+| 4 | **Milestone 1** — Black-Scholes pricer with delta and vega | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | Complete |
+| 5 | Memory model (stack/heap, pointers, references); normal RNG harness | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | In progress |
+| 6 | Classes + RAII; GBM Monte Carlo option pricer | — | Not started |
+| 7 | File I/O; CSV loader + returns summary | — | Not started |
+| 8 | **Milestone 2** — Monte Carlo VaR on real historical data | — | Not started |
+| 9 | STL containers + algorithms; OHLC bar aggregator | — | Not started |
+| 10 | Polymorphism; SMA-crossover strategy | — | Not started |
+| 11 | Limit order book with matching engine | — | Not started |
+| 12 | **Milestone 3** — order-book replay backtester | — | Not started |
+| 13 | Performance: profiling + variance reduction | — | Not started |
+| 14 | Parallelism; parallel Monte Carlo pricer | — | Not started |
+| 15 | CMake + GoogleTest + repo hygiene | — | Not started |
+| 16 | **Milestone 4** — 3 polished portfolio repos | — | Not started |
+
+---
+
+## Artifacts built so far
+
+### Week 1 — Present-value calculator
+`projects/week01/pv.cpp`
+
+Computes PV = FV / (1+r)^n. Derived from first principles before writing a line of code. Guards against r = -1 (division by zero). Acceptance criteria: compiles clean under `-Wall -Wextra -std=c++20`, prints `863.84` for the spec input, exits with code 1 on bad input.
+
+### Week 2 — Bond pricer
+`projects/week02/bond_pricer.cpp`
+
+Prices a fixed-coupon bond: sum of discounted coupon payments plus discounted face value. Distinguishes coupon rate `r` from yield `y`. Guards against degenerate inputs. Acceptance criteria: F=1000, r=0.05, y=0.05, n=5 → 1000.00 (par); y=0.06 → 957.88 (below par).
+
+### Week 3 — Returns statistics tool
+`projects/week03/price_series.cpp`
+
+Computes arithmetic and log returns from a price series; calculates mean, sample variance (Bessel-corrected, n−1), and standard deviation. Output verified against a Python reference to 4 decimal places.
+
+Also includes `projects/week04/bond_pricer_ytm.cpp`: YTM solver using bisection — the first numerical root-finding algorithm in the curriculum.
+
+### Week 4 — Black-Scholes pricer (Milestone 1)
+`projects/week04/bs_pricer.cpp`
+
+Full Black-Scholes call and put pricer. Includes:
+- `compute_d1` / `compute_d2` helpers (no duplication across callers)
+- Delta: N(d1)
+- Vega: S * sqrt(T) * phi(d1)
+- Put-call parity assertion across 20 varied input sets (ITM, OTM, ATM; T from 1 to 20; sigma from 0.1 to 0.9) — all pass at tolerance 1e-10
+
+### Week 5 — Normal RNG harness (in progress)
+`projects/week05/rng_harness.cpp`
+
+Generates N(0,1) samples using `std::mt19937` + `std::normal_distribution`. Acceptance criteria: mean in [-0.005, 0.005], standard deviation in [0.995, 1.005], same seed reproduces byte-for-byte. Both criteria currently green.
+
+---
+
+## Method
+
+**Project-based.** Every week ends with a runnable artifact, not a worksheet.
+
+**Retrieval practice.** Concepts are re-tested from memory at spaced intervals (48h, 1 week, 1 month). Scores are logged in [PROGRESS.md](PROGRESS.md). If it can't be recalled without the notes, it doesn't count as learned.
+
+**Derive before implement.** The math behind each tool — PV formula, bond pricing, Black-Scholes — is worked out on paper first. Code is written to express a derivation, not to copy a template.
+
+**Reviewed as production code.** Each artifact goes through a code review before the week closes: silent error returns, duplication, guard placement, test coverage. Bugs are fixed before moving on.
+
+---
+
+## Compile any artifact
+
+All files use the same flags:
+
+```bash
+g++ -Wall -Wextra -std=c++20 projects/weekNN/artifact.cpp -o artifact && ./artifact
+```
+
+No external dependencies. Standard library only through week 15.
+
+---
+
+## Workspace structure
 
 | File | Purpose |
 |---|---|
-| [CLAUDE.md](CLAUDE.md) | Durable, operational rules Claude reads every session. Keep ≤200 lines. |
-| [CONTEXT.md](CONTEXT.md) | What this specific project is, who it's for, what success looks like. **Edit this first for new projects.** |
-| [PROMPTING_PROTOCOL.md](PROMPTING_PROTOCOL.md) | The 5-part prompting framework (Identity, Task, Context, Constraints, Output Format). |
-| [WORKFLOW.md](WORKFLOW.md) | Standard 10-phase project lifecycle. |
-| [AGENTS.md](AGENTS.md) | Library of 11 reusable Claude roles (architect, reviewer, debugger, etc.). |
-| [REFERENCES.md](REFERENCES.md) | Background material. Every claim labeled VERIFIED / UNVERIFIED / TO RESEARCH. |
-| [TASKS.md](TASKS.md) | Lightweight kanban (Backlog / In Progress / Blocked / Done). |
-| [DECISIONS.md](DECISIONS.md) | Log of architectural / strategic decisions with reasoning. |
-| [ASSUMPTIONS.md](ASSUMPTIONS.md) | Assumptions made during execution, with verification path. |
-| [REFERENCE_RESEARCH_QUEUE.md](REFERENCE_RESEARCH_QUEUE.md) | Items needing factual verification before they can be cited. |
-| [.claude/skills/project-planning/SKILL.md](.claude/skills/project-planning/SKILL.md) | Example skill: vague idea → executable plan. |
-| [.claude/agents/](.claude/agents/) | Drop custom subagent definitions here. |
-| [.claude/commands/new-project.md](.claude/commands/new-project.md) | Example slash command for spinning up a new project. |
-| [templates/](templates/) | Copy-paste templates for briefs, prompts, reviews, decisions, retros. |
-| [examples/](examples/) | What strong Claude outputs look like, and what to avoid. |
-
-## First-time setup (5 min)
-
-1. **Edit [CONTEXT.md](CONTEXT.md)** — fill in project name, purpose, success criteria. This is the most important file.
-2. **Skim [CLAUDE.md](CLAUDE.md)** — confirm the rules match how you want to work; edit the "User working style" section.
-3. **Read [PROMPTING_PROTOCOL.md](PROMPTING_PROTOCOL.md)** once — it changes how you'll write prompts.
-4. **Pick a starting template** from [templates/](templates/) for your first task.
-
-## Forking for a new project
-
-```
-cp -r general-workflow-ideation/ my-new-project/
-cd my-new-project
-# clear per-project state:
-> TASKS.md            # blank kanban
-> DECISIONS.md        # keep the format header, drop the seed entry
-> ASSUMPTIONS.md      # blank
-# then edit CONTEXT.md for the new project
-```
-
-Or invoke [.claude/commands/new-project.md](.claude/commands/new-project.md) inside Claude Code.
-
-## How to work with Claude Code using this workspace
-
-- For non-trivial tasks, start in **plan mode** — Claude writes a plan, you approve, then it executes.
-- Use [templates/task-prompt-template.md](templates/task-prompt-template.md) as your default prompt skeleton.
-- When Claude is unsure, it should write to [ASSUMPTIONS.md](ASSUMPTIONS.md) rather than guess silently.
-- After meaningful work, update [TASKS.md](TASKS.md) and add anything new to [DECISIONS.md](DECISIONS.md) or [REFERENCE_RESEARCH_QUEUE.md](REFERENCE_RESEARCH_QUEUE.md).
-- At project end, fill in [templates/retrospective-template.md](templates/retrospective-template.md).
-
-## What this workspace is not
-
-- Not a code framework — language/stack agnostic.
-- Not an agent runtime — it's documentation Claude reads.
-- Not a replacement for clear thinking — it's scaffolding for it.
+| [CONTEXT.md](CONTEXT.md) | Project purpose, success criteria, what to avoid |
+| [TASKS.md](TASKS.md) | Current task board (now / next / done / blocked) |
+| [PROGRESS.md](PROGRESS.md) | Week-by-week ledger, milestones, retrieval-practice scores |
+| [DECISIONS.md](DECISIONS.md) | Log of non-trivial choices with reasoning |
+| [ASSUMPTIONS.md](ASSUMPTIONS.md) | Assumptions flagged during execution |
+| [CLAUDE.md](CLAUDE.md) | Durable operating rules for the AI collaborator |
+| [notes/](notes/) | Per-session learning notes |
+| [projects/](projects/) | Weekly artifacts (source + compiled binaries) |
+| [templates/](templates/) | Retrospective, task-prompt, decision templates |
