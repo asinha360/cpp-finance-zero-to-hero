@@ -1,6 +1,14 @@
 # PROGRESS.md
 
 ## Current state
+## Next session
+
+**First action:** Compile `projects/week05/rng_harness.cpp` under `g++ -Wall -Wextra -std=c++20 rng_harness.cpp -o rng && ./rng`; confirm both asserts pass and histogram prints; then write `projects/week05/retrospective.md`.
+**Retrieval question:** "Higher σ raises a call's price — explain why in one sentence." Also: "You have `std::vector<int> counts(16, 0)`. Why is `push_back(bin_index)` wrong, and what does `counts[bin_index]++` do instead?"
+**Carry-forwards:** σ asymmetry reason (dropped at closing, 1/2); `push_back` vs pre-initialized increment (0 this session).
+
+---
+
 - **Today's date:** 2026-05-10
 - **Curriculum week:** 5 of 16 — **In progress**
 - **Days into curriculum:** 11 (calendar) / 22 sessions complete
@@ -160,6 +168,7 @@
 | 2026-05-03 | Log vs simple returns — additivity (W3 Day 3c) | Direction (time vs cross-section) retrieved unaided; ln product rule identity written correctly; cancellation of intermediate P₁ derived after one prompt; full mechanism clean by end | 2026-05-10 |
 
 | 2026-05-10 | BS inputs + directions — spaced retest (due 2026-05-10, from W4 Day 1) | 5/5 unaided; σ asymmetry (downside floor) stated without prompting [FIRST TIME full reasoning] | 2026-05-17 |
+| 2026-05-10 | BS inputs — closing check (directions + σ reason) | 1/2 — directions 5/5 unaided; σ reason dropped when asked explicitly; re-test Day 5 | 2026-05-11 |
 | 2026-05-10 | Range-for vs index loop — when each applies | Unaided: range-for needs an existing collection; repeat-N needs an index | 2026-05-17 |
 | 2026-05-10 | `push_back` vs pre-initialized `counts[i]++` | Distinction understood after one explanation | 2026-05-14 |
 

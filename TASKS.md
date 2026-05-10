@@ -6,7 +6,9 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-_None._
+- **W5 Day 5 — first action:** Compile `projects/week05/rng_harness.cpp` under `g++ -Wall -Wextra -std=c++20 rng_harness.cpp -o rng && ./rng`; confirm both asserts pass and histogram prints; then write `projects/week05/retrospective.md` using `templates/retrospective-template.md`.
+- **Carry-forward — σ reasoning:** Dropped at closing check (1/2). Re-test at Day 5 start: "Higher σ raises a call's price — explain why in one sentence."
+- **Carry-forward — `push_back` vs `counts[i]++`:** Scored 0 this session (corrected after direct explanation). Re-test before W6.
 
 ## Next (queued, ordered)
 
