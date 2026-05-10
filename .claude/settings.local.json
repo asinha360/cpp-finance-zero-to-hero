@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/sniperzero360/my-first-workspace/**)",
+      "Read(//Users/sniperzero360/.claude/**)",
+      "Bash(g++ -Wall -Wextra -std=c++20 -o pv pv.cpp)",
+      "Bash(./pv)",
+      "Bash(echo \"EXIT_CODE: $?\")"
+    ]
+  }
+}

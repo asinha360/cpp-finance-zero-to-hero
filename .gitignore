@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# C++ build artifacts
+*.o
+*.a
+*.dSYM/
+
+# Compiled executables — add new entries here as each week's binary is built
+projects/week01/hello
+projects/week01/pv
+projects/week02/bond_pricer
+projects/week03/bond_pricer_V2
+projects/week03/price_series
+projects/week04/bs_pricer
+projects/week04/ytm
+projects/week05/pv
+projects/week05/rng

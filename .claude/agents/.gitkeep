@@ -1,0 +1,14 @@
+# Custom subagent definitions go in this directory.
+#
+# Each subagent is a single .md file with frontmatter:
+#
+#   ---
+#   name: my-agent-name
+#   description: When to use this agent (one sentence). Used by the orchestrator to choose.
+#   tools: Read, Grep, Glob   # optional; subset of available tools
+#   ---
+#
+#   System prompt body for the subagent goes here.
+#
+# See AGENTS.md (in the workspace root) for role definitions you can lift into
+# subagent files when you want them to run in their own isolated context.
