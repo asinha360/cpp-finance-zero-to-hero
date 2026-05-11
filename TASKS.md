@@ -6,15 +6,18 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-- **W5 Day 5 — first action:** Compile `projects/week05/rng_harness.cpp` under `g++ -Wall -Wextra -std=c++20 rng_harness.cpp -o rng && ./rng`; confirm both asserts pass and histogram prints; then write `projects/week05/retrospective.md` using `templates/retrospective-template.md`.
-- **Carry-forward — σ reasoning:** Dropped at closing check (1/2). Re-test at Day 5 start: "Higher σ raises a call's price — explain why in one sentence."
-- **Carry-forward — `push_back` vs `counts[i]++`:** Scored 0 this session (corrected after direct explanation). Re-test before W6.
+_Nothing. Week 5 complete. Ready for W6 Day 1._
 
 ## Next (queued, ordered)
 
-- **W5 Day 5 (1h)** — Acceptance-test run, retrospective, update ledger.
+- **W6 Day 1 (2h)** — Classes + RAII concept intro. GBM path simulator motivation. Jensen's inequality (why σ²/2 in d1) — deferred from W4. Re-test due 2026-05-12: stack vs heap + vector internals; memory leak + RAII motivation.
+- **Re-test 2026-05-14** — `push_back` vs pre-initialized increment.
+- **Re-test 2026-05-15** — Three roles of `*`; T& vs T* distinctions; PV re-derive.
+- **Re-test 2026-05-17** — BS inputs + directions (5/5); σ asymmetry one-sentence; range-for vs index loop.
 
 ## Done
+
+- **2026-05-11 — W5 Day 5: Acceptance test passed + retrospective written.** Both criteria green: mean 0.00179 ∈ [-0.005, 0.005], stdev 0.99992 ∈ [0.995, 1.005], seed 123 byte-for-byte. Retrospective at [projects/week05/retrospective.md](projects/week05/retrospective.md). Carry-forward retrievals cleared: σ asymmetry one-sentence clean (full mechanism unaided); `push_back` vs `counts[bin_index]++` distinction articulated correctly. **Week 5 complete.**
 
 - **2026-05-10 — W5 Day 4: Code review complete.** Blocking issue resolved: silent `return 0.0` sentinel in `mean` and `sample_variance` replaced with `assert` (same anti-pattern as W4's `return 1`). Suggestions applied: range-for with `const double&` replacing `(int)` cast loops; `setprecision(5)`; `>= 2` in assert; `static_cast<double>` in both divisions. Histogram built from scratch: binning, clamping, counting, aligned print loop. Bell-curve shape confirmed. BS inputs retrieval: 5/5 directions unaided; σ asymmetry (downside floor argument) stated without prompting [FIRST TIME]. Range-for vs index loop distinction retrieved correctly unaided.
 

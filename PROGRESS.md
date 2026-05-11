@@ -3,18 +3,25 @@
 ## Current state
 ## Next session
 
-**First action:** Compile `projects/week05/rng_harness.cpp` under `g++ -Wall -Wextra -std=c++20 rng_harness.cpp -o rng && ./rng`; confirm both asserts pass and histogram prints; then write `projects/week05/retrospective.md`.
-**Retrieval question:** "Higher σ raises a call's price — explain why in one sentence." Also: "You have `std::vector<int> counts(16, 0)`. Why is `push_back(bin_index)` wrong, and what does `counts[bin_index]++` do instead?"
-**Carry-forwards:** σ asymmetry reason (dropped at closing, 1/2); `push_back` vs pre-initialized increment (0 this session).
+**First action:** W6 Day 1 concept intro — classes and RAII. Before new content, run spaced retests due today: stack vs heap labels + vector internals; memory leak mechanism + RAII motivation.
+**Retrieval question (opening W6 Day 1):** "A `std::vector<double>` with 1M elements: where does the control block live, and where does the data live? Why does this matter when the function returns?"
+**Carry-forwards into W6:** Jensen's inequality (deferred from W4 Day 3); `push_back` vs pre-initialized increment re-test due 2026-05-14.
 
 ---
 
-- **Today's date:** 2026-05-10
-- **Curriculum week:** 5 of 16 — **In progress**
-- **Days into curriculum:** 11 (calendar) / 22 sessions complete
+- **Today's date:** 2026-05-11
+- **Curriculum week:** 6 of 16 — **Not started**
+- **Days into curriculum:** 12 (calendar) / 23 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w5_d4.md](notes/w5_d4.md) (code review log + histogram)
+- **Today's artifact:** [notes/w5_d5.md](notes/w5_d5.md) (acceptance test + retrospective) | [projects/week05/retrospective.md](projects/week05/retrospective.md)
+
+- **W5 Day 5 wins:**
+  - Acceptance test passed: mean 0.00179 ∈ [-0.005, 0.005] ✓, stdev 0.99992 ∈ [0.995, 1.005] ✓, seed 123 byte-for-byte ✓.
+  - σ asymmetry carry-forward cleared: "downside is floored at 0 (call expires worthless), upside is unbounded; σ lifts both tails but only the beneficial one counts" — full mechanism, unprompted, one sentence. [FIRST TIME robust unaided retrieval under closing pressure]
+  - `push_back` vs `counts[bin_index]++` carry-forward cleared: growth (append new element) vs mutation (increment existing slot) distinction articulated correctly.
+  - Retrospective written at [projects/week05/retrospective.md](projects/week05/retrospective.md). Three concrete process changes logged for W6.
+  - **Week 5 complete.**
 
 - **W5 Day 4 wins:**
   - Code review: blocking issue (silent `return 0.0` sentinel) identified and fixed in both `mean` and `sample_variance` — same W4 anti-pattern, caught independently after one prompt.
@@ -104,7 +111,7 @@
 | 2 | Functions + control flow; bond pricer | **Complete** | 2026-04-23 | 2026-04-29 | [projects/week02/bond_pricer.cpp](projects/week02/bond_pricer.cpp) | [projects/week02/retrospective.md](projects/week02/retrospective.md) |
 | 3 | Collections + summary statistics; returns stats tool | **Complete** | 2026-04-29 | 2026-05-03 | [projects/week03/price_series.cpp](projects/week03/price_series.cpp) | [projects/week03/retrospective.md](projects/week03/retrospective.md) |
 | 4 | **MILESTONE 1** — Black-Scholes pricer with Δ, ν | **Complete** | 2026-05-03 | 2026-05-06 | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | [projects/week04/retrospective.md](projects/week04/retrospective.md) |
-| 5 | Memory model + first RNG; normal RNG harness | **In progress** | 2026-05-07 | — | — | — |
+| 5 | Memory model + first RNG; normal RNG harness | **Complete** | 2026-05-07 | 2026-05-11 | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | [projects/week05/retrospective.md](projects/week05/retrospective.md) |
 | 6 | Classes + RAII; GBM MC option pricer | Not started | — | — | — | — |
 | 7 | File I/O; CSV loader + returns summary | Not started | — | — | — | — |
 | 8 | **MILESTONE 2** — Monte Carlo VaR on real data | Not started | — | — | — | — |
@@ -166,6 +173,10 @@
 | 2026-05-03 | Bond pricer re-implementation from scratch (W3 Day 3a) | Structure recalled correctly; formula used `r` instead of `y` in denominator — caught and self-corrected after one prompt; sum lower bound started at `i=2`, corrected after one prompt; code compiled and logic verified correct | 2026-05-10 |
 | 2026-05-03 | `std::accumulate` double precision loss (W3 Day 3b) | Mechanism (rounding errors compound) correct direction; confused "exponentiate" with additive accumulation; large-total / small-element precision floor understood after one worked example; correctly applied to price_series.cpp variance — no loss there | 2026-05-10 |
 | 2026-05-03 | Log vs simple returns — additivity (W3 Day 3c) | Direction (time vs cross-section) retrieved unaided; ln product rule identity written correctly; cancellation of intermediate P₁ derived after one prompt; full mechanism clean by end | 2026-05-10 |
+
+| 2026-05-11 | σ asymmetry — opening carry-forward re-test (due 2026-05-11) | 2/2 unaided. Full mechanism: floor at 0 operative ("load bearing"), σ lifts both tails, asymmetric benefit → higher EV → higher call price. [FIRST TIME robust under pressure] | 2026-05-17 |
+| 2026-05-11 | `push_back` vs pre-initialized `counts[i]++` — carry-forward re-test | 1/2 — mechanism correct (growth vs mutation); "raw values" said instead of "bin indices" — one precision sharpened | 2026-05-14 |
+| 2026-05-11 | σ asymmetry — closing check (same session, reframed prompt) | 2/2 unaided. Word-for-word same mechanism as opening. [FIRST TIME] closing check clean — Day 4 closing had scored 1/2 | 2026-05-17 |
 
 | 2026-05-10 | BS inputs + directions — spaced retest (due 2026-05-10, from W4 Day 1) | 5/5 unaided; σ asymmetry (downside floor) stated without prompting [FIRST TIME full reasoning] | 2026-05-17 |
 | 2026-05-10 | BS inputs — closing check (directions + σ reason) | 1/2 — directions 5/5 unaided; σ reason dropped when asked explicitly; re-test Day 5 | 2026-05-11 |
