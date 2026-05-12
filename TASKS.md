@@ -6,16 +6,18 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-_Nothing. Week 5 complete. Ready for W6 Day 1._
+_Nothing. W6 Day 1 complete._
 
 ## Next (queued, ordered)
 
-- **W6 Day 1 (2h)** — Classes + RAII concept intro. GBM path simulator motivation. Jensen's inequality (why σ²/2 in d1) — deferred from W4. Re-test due 2026-05-12: stack vs heap + vector internals; memory leak + RAII motivation.
-- **Re-test 2026-05-14** — `push_back` vs pre-initialized increment.
+- **W6 Day 2 (2h)** — First solo implementation attempt: extend GBMSimulator to price a European call via Monte Carlo (average max(S_T - K, 0) discounted). Jensen's inequality (deferred from W4) — introduce when simulating paths. Re-test at session open: member initializer list + GBM formula (both flagged weak today).
+- **Re-test 2026-05-14** — `push_back` vs pre-initialized increment; member initializer list (W6 Day 1 weak spot).
 - **Re-test 2026-05-15** — Three roles of `*`; T& vs T* distinctions; PV re-derive.
 - **Re-test 2026-05-17** — BS inputs + directions (5/5); σ asymmetry one-sentence; range-for vs index loop.
 
 ## Done
+
+- **2026-05-11 — W6 Day 1: Classes + RAII concept intro complete.** `NormalSampler` class built from scratch: member initializer list, `public`/`private` access control, RAII principles applied. `GBMSimulator` class built: constructor, nested `_sampler` initializer, `simulate_path()` loop correct on first attempt. Both compile clean under `-Wall -Wextra -std=c++20`. GBM path (S0=100, r=0.05, σ=0.2, T=1, steps=5, seed=42): 100 → 105.348 → 100.893 → 114.716 → 120.402 → 119.789. Spaced retests cleared: vector internals 2/2 unaided; memory leak mechanism sharpened ("runtime allocator" not "OS"). Weak spots logged for Day 2 re-test: member initializer list syntax; GBM formula from memory. Artifacts: [projects/week06/normal_sampler.cpp](projects/week06/normal_sampler.cpp), [projects/week06/gbm_simulator.cpp](projects/week06/gbm_simulator.cpp).
 
 - **2026-05-11 — W5 Day 5: Acceptance test passed + retrospective written.** Both criteria green: mean 0.00179 ∈ [-0.005, 0.005], stdev 0.99992 ∈ [0.995, 1.005], seed 123 byte-for-byte. Retrospective at [projects/week05/retrospective.md](projects/week05/retrospective.md). Carry-forward retrievals cleared: σ asymmetry one-sentence clean (full mechanism unaided); `push_back` vs `counts[bin_index]++` distinction articulated correctly. **Week 5 complete.**
 

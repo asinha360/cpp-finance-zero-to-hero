@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W6 Day 1 concept intro — classes and RAII. Before new content, run spaced retests due today: stack vs heap labels + vector internals; memory leak mechanism + RAII motivation.
-**Retrieval question (opening W6 Day 1):** "A `std::vector<double>` with 1M elements: where does the control block live, and where does the data live? Why does this matter when the function returns?"
-**Carry-forwards into W6:** Jensen's inequality (deferred from W4 Day 3); `push_back` vs pre-initialized increment re-test due 2026-05-14.
+**First action:** W6 Day 2 — solo implementation of MC option pricer using GBMSimulator. Before new content, re-test: member initializer list syntax (write constructor from scratch); GBM formula (write from memory, identify drift vs shock). Jensen's inequality introduction when simulating paths.
+**Retrieval question (opening W6 Day 2):** "Write the GBM one-step formula from memory. Which part is deterministic and which is random, and why is σ²/2 in the drift term?"
+**Carry-forwards into W6 Day 2:** Jensen's inequality (deferred from W4 Day 3); `push_back` vs pre-initialized increment re-test due 2026-05-14; "runtime allocator cannot reclaim mid-run" (not "OS") — sticky imprecision, re-test at open.
 
 ---
 
 - **Today's date:** 2026-05-11
-- **Curriculum week:** 6 of 16 — **Not started**
+- **Curriculum week:** 6 of 16 — **In progress (Day 1 complete)**
 - **Days into curriculum:** 12 (calendar) / 23 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w5_d5.md](notes/w5_d5.md) (acceptance test + retrospective) | [projects/week05/retrospective.md](projects/week05/retrospective.md)
+- **Today's artifact:** [notes/w6_d1.md](notes/w6_d1.md) | [projects/week06/normal_sampler.cpp](projects/week06/normal_sampler.cpp) | [projects/week06/gbm_simulator.cpp](projects/week06/gbm_simulator.cpp)
+
+- **W6 Day 1 wins:**
+  - Spaced retests cleared: vector internals (control block/data/destructor) 3/3 unaided; memory leak mechanism — "OS cannot reclaim" sharpened to "runtime allocator cannot reclaim mid-run."
+  - `NormalSampler` class built from scratch: member initializer list, `public`/`private`, RAII principles applied correctly. Two independent seeds confirmed to produce independent streams.
+  - `GBMSimulator` class built: constructor, member initializer list with nested `_sampler` init, `simulate_path()` loop correct on first attempt. Compiled clean under `-Wall -Wextra -std=c++20`.
+  - GBM formula two-part structure (drift + shock) understood; sigma=0 reduction to pure compounding derived and verified.
+  - Weak spots flagged for re-test: member initializer list syntax; GBM formula from memory.
+  - **[FIRST TIME]** full class built from scratch with correct RAII structure, no raw new/delete.
 
 - **W5 Day 5 wins:**
   - Acceptance test passed: mean 0.00179 ∈ [-0.005, 0.005] ✓, stdev 0.99992 ∈ [0.995, 1.005] ✓, seed 123 byte-for-byte ✓.
@@ -112,7 +120,7 @@
 | 3 | Collections + summary statistics; returns stats tool | **Complete** | 2026-04-29 | 2026-05-03 | [projects/week03/price_series.cpp](projects/week03/price_series.cpp) | [projects/week03/retrospective.md](projects/week03/retrospective.md) |
 | 4 | **MILESTONE 1** — Black-Scholes pricer with Δ, ν | **Complete** | 2026-05-03 | 2026-05-06 | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | [projects/week04/retrospective.md](projects/week04/retrospective.md) |
 | 5 | Memory model + first RNG; normal RNG harness | **Complete** | 2026-05-07 | 2026-05-11 | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | [projects/week05/retrospective.md](projects/week05/retrospective.md) |
-| 6 | Classes + RAII; GBM MC option pricer | Not started | — | — | — | — |
+| 6 | Classes + RAII; GBM MC option pricer | **In progress** | 2026-05-11 | — | [projects/week06/gbm_simulator.cpp](projects/week06/gbm_simulator.cpp) | — |
 | 7 | File I/O; CSV loader + returns summary | Not started | — | — | — | — |
 | 8 | **MILESTONE 2** — Monte Carlo VaR on real data | Not started | — | — | — | — |
 | 9 | STL containers + algorithms; OHLC bar aggregator | Not started | — | — | — | — |
@@ -174,6 +182,11 @@
 | 2026-05-03 | `std::accumulate` double precision loss (W3 Day 3b) | Mechanism (rounding errors compound) correct direction; confused "exponentiate" with additive accumulation; large-total / small-element precision floor understood after one worked example; correctly applied to price_series.cpp variance — no loss there | 2026-05-10 |
 | 2026-05-03 | Log vs simple returns — additivity (W3 Day 3c) | Direction (time vs cross-section) retrieved unaided; ln product rule identity written correctly; cancellation of intermediate P₁ derived after one prompt; full mechanism clean by end | 2026-05-10 |
 
+| 2026-05-11 | Vector internals — opening W6 Day 1 retest | 3/3 unaided. Control block on stack (pointer, size, capacity); data on heap; destructor fires on scope exit, frees heap before stack wipe; no leak. | 2026-05-18 |
+| 2026-05-11 | Memory leak mechanism — W6 Day 1 retest | 2/3. Mechanism and consequence correct; "OS cannot reclaim" sharpened to "runtime allocator cannot reclaim mid-run; OS only reclaims on process exit." | 2026-05-18 |
+| 2026-05-11 | Member initializer list syntax | Partial — understood pattern; typed type names inside `()` instead of just values. Re-test: write constructor from scratch. | 2026-05-14 |
+| 2026-05-11 | GBM formula — drift + shock structure | Understood with coaching; sigma=0 reduction correct unaided. Flagged weak — re-test write from memory. | 2026-05-14 |
+| 2026-05-11 | Vector internals — closing retrieval check (same question as session open) | 2/2 unaided. Added RAII destructor point unprompted — key gain vs session open. "OS hasn't reclaimed" persists (same imprecision as morning); runtime allocator distinction still sticky. | 2026-05-18 |
 | 2026-05-11 | σ asymmetry — opening carry-forward re-test (due 2026-05-11) | 2/2 unaided. Full mechanism: floor at 0 operative ("load bearing"), σ lifts both tails, asymmetric benefit → higher EV → higher call price. [FIRST TIME robust under pressure] | 2026-05-17 |
 | 2026-05-11 | `push_back` vs pre-initialized `counts[i]++` — carry-forward re-test | 1/2 — mechanism correct (growth vs mutation); "raw values" said instead of "bin indices" — one precision sharpened | 2026-05-14 |
 | 2026-05-11 | σ asymmetry — closing check (same session, reframed prompt) | 2/2 unaided. Word-for-word same mechanism as opening. [FIRST TIME] closing check clean — Day 4 closing had scored 1/2 | 2026-05-17 |
