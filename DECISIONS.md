@@ -33,4 +33,26 @@ Non-trivial choices, one entry each. Date, decision, reason, what would flip it.
 
 ---
 
+---
+
+## 2026-05-13 — GBMSimulator as local variable vs. member of MCPricer
+
+**Context.** W6 Day 2: user tried to declare `GBMSimulator _simulator` as a private member of `MCPricer`. `GBMSimulator` has no default constructor — it requires S0, r, sigma, T, steps, seed. Also, `N` (number of paths) and `steps` (time steps per path) are different parameters; the user had conflated them.
+
+**Decision.** Create `GBMSimulator` as a local variable inside `price_call()`, hardcoding `steps=252` and `seed=42` for now. Rationale: simplest correct solution at W6 skill level; avoids adding `steps` and `seed` as `MCPricer` constructor parameters before the user understands why they'd need them.
+
+**What would flip it.** If we add variance reduction (W13) or parallel paths (W14), the simulator configuration will need to be more explicit. At that point, promote `steps` and `seed` to constructor parameters and initialize `_simulator` in the member initializer list.
+
+---
+
+## 2026-05-13 — Inline member function bodies in headers at W6
+
+**Context.** W6 Day 2: header/source split introduced. User asked whether to put the full `MCPricer` class (including method bodies) in the header. Convention for large projects is declaration in `.h`, definition in `.cpp`. But at this scale (single-file compilation, small methods), everything inline in the header is simpler and correct.
+
+**Decision.** Full class definition (including method bodies) in the header through at least W14. Rationale: the declaration/definition split is a compilation-speed optimization and a readability aid for large codebases — neither concern applies here. The full split will be introduced naturally with CMake in W15.
+
+**What would flip it.** If any class grows beyond ~50 lines of method body, or if compilation time becomes noticeable, extract method bodies to `.cpp` earlier.
+
+---
+
 **Explicitly deferred / rejected.** Full Xcode IDE, GCC via Homebrew, Conan/vcpkg, Docker, valgrind — reasons noted in [setup.md](setup.md) "Deliberately omitted" section.

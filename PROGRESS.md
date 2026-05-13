@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W6 Day 2 — solo implementation of MC option pricer using GBMSimulator. Before new content, re-test: member initializer list syntax (write constructor from scratch); GBM formula (write from memory, identify drift vs shock). Jensen's inequality introduction when simulating paths.
-**Retrieval question (opening W6 Day 2):** "Write the GBM one-step formula from memory. Which part is deterministic and which is random, and why is σ²/2 in the drift term?"
-**Carry-forwards into W6 Day 2:** Jensen's inequality (deferred from W4 Day 3); `push_back` vs pre-initialized increment re-test due 2026-05-14; "runtime allocator cannot reclaim mid-run" (not "OS") — sticky imprecision, re-test at open.
+**First action:** W6 Day 3 — retrieval practice session. Open with: `push_back` vs pre-initialized increment (due 2026-05-14); three roles of `*` (due 2026-05-15); T& vs T* (due 2026-05-15). Then introduce MC convergence rate O(1/√N).
+**Retrieval question (opening W6 Day 3):** "Without looking: what are the three roles of `*` in C++? Give one example of each."
+**Carry-forwards into W6 Day 3:** `push_back` vs pre-initialized increment still due 2026-05-14; MC convergence O(1/√N) not yet tested.
 
 ---
 
-- **Today's date:** 2026-05-11
-- **Curriculum week:** 6 of 16 — **In progress (Day 1 complete)**
-- **Days into curriculum:** 12 (calendar) / 23 sessions complete
+- **Today's date:** 2026-05-13
+- **Curriculum week:** 6 of 16 — **In progress (Day 2 complete)**
+- **Days into curriculum:** 13 (calendar) / 24 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w6_d1.md](notes/w6_d1.md) | [projects/week06/normal_sampler.cpp](projects/week06/normal_sampler.cpp) | [projects/week06/gbm_simulator.cpp](projects/week06/gbm_simulator.cpp)
+- **Today's artifact:** [notes/w6_d2.md](notes/w6_d2.md) | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | [projects/week06/mc_pricer.cpp](projects/week06/mc_pricer.cpp)
+
+- **W6 Day 2 wins:**
+  - σ²/2 mechanism articulated in one sentence after one numerical hint: "e^x is convex — upside lifts more than downside drops; σ²/2 subtracts the excess so expected price grows at exactly r." Jensen's inequality cleared.
+  - `#include` mechanics understood from first principles: preprocessor copy-paste, not a function call. **[FIRST TIME]**
+  - Header guards written correctly and independently on all three headers. **[FIRST TIME]**
+  - Header/source split applied across a three-file project. **[FIRST TIME]**
+  - `MCPricer` implemented correctly. At N=100,000: 10.4384 vs BS 10.45 — within convergence band. W6 acceptance criterion passed.
+  - Six bugs caught and fixed: wrong index (`sim_vec[251]` → `sim_vec.back()`), unused `_N`, missing type in range-for, duplicate class definition in `.cpp`, unused includes, missing `<algorithm>`.
 
 - **W6 Day 1 wins:**
   - Spaced retests cleared: vector internals (control block/data/destructor) 3/3 unaided; memory leak mechanism — "OS cannot reclaim" sharpened to "runtime allocator cannot reclaim mid-run."
@@ -181,6 +189,12 @@
 | 2026-05-03 | Bond pricer re-implementation from scratch (W3 Day 3a) | Structure recalled correctly; formula used `r` instead of `y` in denominator — caught and self-corrected after one prompt; sum lower bound started at `i=2`, corrected after one prompt; code compiled and logic verified correct | 2026-05-10 |
 | 2026-05-03 | `std::accumulate` double precision loss (W3 Day 3b) | Mechanism (rounding errors compound) correct direction; confused "exponentiate" with additive accumulation; large-total / small-element precision floor understood after one worked example; correctly applied to price_series.cpp variance — no loss there | 2026-05-10 |
 | 2026-05-03 | Log vs simple returns — additivity (W3 Day 3c) | Direction (time vs cross-section) retrieved unaided; ln product rule identity written correctly; cancellation of intermediate P₁ derived after one prompt; full mechanism clean by end | 2026-05-10 |
+
+| 2026-05-13 | GBM formula from memory — W6 Day 2 opening re-test | Full credit. Structure correct; drift/shock split correct; `rt` notation ambiguity flagged (should be `r`, not `r*t`). | 2026-05-20 |
+| 2026-05-13 | σ²/2 mechanism — W6 Day 2 re-test (opening) | 1/2. Named "log-normal asymmetry correction" correctly; needed numerical hint (e^0.1+e^-0.1)/2=1.005; then articulated full mechanism cleanly. | 2026-05-20 |
+| 2026-05-13 | σ²/2 mechanism — W6 Day 2 closing check | 2/2 unaided. Full mechanism in one sentence without any hint: "e^x is convex — average of e^(+x) and e^(-x) exceeds 1; σ²/2 subtracts that excess so expected price growth stays at exactly r." [FIRST TIME fully unaided] | 2026-05-20 |
+| 2026-05-13 | Call payoff `max(S_T - K, 0)` | Unaided. Retrieved correctly when prompted. | 2026-05-20 |
+| 2026-05-13 | `#include` mechanics — preprocessor copy-paste | [FIRST TIME] Understood correctly from first principles without explanation. | 2026-05-20 |
 
 | 2026-05-11 | Vector internals — opening W6 Day 1 retest | 3/3 unaided. Control block on stack (pointer, size, capacity); data on heap; destructor fires on scope exit, frees heap before stack wipe; no leak. | 2026-05-18 |
 | 2026-05-11 | Memory leak mechanism — W6 Day 1 retest | 2/3. Mechanism and consequence correct; "OS cannot reclaim" sharpened to "runtime allocator cannot reclaim mid-run; OS only reclaims on process exit." | 2026-05-18 |

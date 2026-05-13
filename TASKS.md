@@ -6,16 +6,18 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-_Nothing. W6 Day 1 complete._
+_Nothing. W6 Day 2 complete._
 
 ## Next (queued, ordered)
 
-- **W6 Day 2 (2h)** — First solo implementation attempt: extend GBMSimulator to price a European call via Monte Carlo (average max(S_T - K, 0) discounted). Jensen's inequality (deferred from W4) — introduce when simulating paths. Re-test at session open: member initializer list + GBM formula (both flagged weak today).
-- **Re-test 2026-05-14** — `push_back` vs pre-initialized increment; member initializer list (W6 Day 1 weak spot).
+- **W6 Day 3 (1h)** — Retrieval practice: `push_back` vs pre-initialized increment (due 2026-05-14); three roles of `*` (due 2026-05-15); T& vs T* (due 2026-05-15). Introduce MC convergence rate O(1/√N).
+- **Re-test 2026-05-14** — `push_back` vs pre-initialized increment.
 - **Re-test 2026-05-15** — Three roles of `*`; T& vs T* distinctions; PV re-derive.
 - **Re-test 2026-05-17** — BS inputs + directions (5/5); σ asymmetry one-sentence; range-for vs index loop.
 
 ## Done
+
+- **2026-05-13 — W6 Day 2: MCPricer implemented + header architecture complete.** `MCPricer` built in `mc_pricer.h` / `mc_pricer.cpp`. Runs N GBM paths, computes `max(S_T − K, 0)` per path, averages, discounts. At N=100,000: 10.4384 vs BS 10.45 — within convergence band. Header guards added to all three W6 headers. Correct `#include` sets applied throughout. Six bugs caught: wrong index (`sim_vec[251]` → `back()`), unused `_N`, missing type in range-for, duplicate class definition in `.cpp`, unused includes, missing `<algorithm>`. `#include` mechanics understood from first principles [FIRST TIME]. Artifacts: [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h), [projects/week06/mc_pricer.cpp](projects/week06/mc_pricer.cpp), [notes/w6_d2.md](notes/w6_d2.md).
 
 - **2026-05-11 — W6 Day 1: Classes + RAII concept intro complete.** `NormalSampler` class built from scratch: member initializer list, `public`/`private` access control, RAII principles applied. `GBMSimulator` class built: constructor, nested `_sampler` initializer, `simulate_path()` loop correct on first attempt. Both compile clean under `-Wall -Wextra -std=c++20`. GBM path (S0=100, r=0.05, σ=0.2, T=1, steps=5, seed=42): 100 → 105.348 → 100.893 → 114.716 → 120.402 → 119.789. Spaced retests cleared: vector internals 2/2 unaided; memory leak mechanism sharpened ("runtime allocator" not "OS"). Weak spots logged for Day 2 re-test: member initializer list syntax; GBM formula from memory. Artifacts: [projects/week06/normal_sampler.cpp](projects/week06/normal_sampler.cpp), [projects/week06/gbm_simulator.cpp](projects/week06/gbm_simulator.cpp).
 
