@@ -8,15 +8,15 @@
 class MCPricer {
     public:
         MCPricer(double S0, double K, double r, 
-                 double sigma, double T, int N)
-            : _S0(S0), _K(K), _r(r), _sigma(sigma), _T(T), _N(N)
+                 double sigma, double T, int N, 
+                 int steps, int seed)
+            : _K(K), _r(r), _T(T), _N(N), _simulator(S0, r, sigma, T, steps, seed)
         {
 
         }
 
         double price_call(){
 
-            GBMSimulator _simulator( _S0, _r, _sigma, _T, 252, 42);
             double payoff_sum = 0.0;
             
 
@@ -29,8 +29,9 @@ class MCPricer {
         }
 
     private:
-        double _S0, _K, _r, _sigma, _T;
+        double _K, _r, _T;
         int _N;
+        GBMSimulator _simulator;
 };
 
 #endif

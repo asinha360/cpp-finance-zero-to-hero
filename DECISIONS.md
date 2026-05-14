@@ -43,6 +43,8 @@ Non-trivial choices, one entry each. Date, decision, reason, what would flip it.
 
 **What would flip it.** If we add variance reduction (W13) or parallel paths (W14), the simulator configuration will need to be more explicit. At that point, promote `steps` and `seed` to constructor parameters and initialize `_simulator` in the member initializer list.
 
+**EXECUTED — 2026-05-14 (W6 Day 4 code review).** The flip was executed earlier than anticipated: the code review revealed the design flaw at W6 (same paths on every `price_call()` call, not just a W13 concern). `steps` and `seed` promoted to `MCPricer` constructor parameters; `_simulator` promoted to persistent member variable initialized in the constructor's member initializer list. Four redundant private fields removed (`_S0`, `_sigma`, `_steps`, `_seed`). See [notes/w6_d4.md](notes/w6_d4.md).
+
 ---
 
 ## 2026-05-13 — Inline member function bodies in headers at W6

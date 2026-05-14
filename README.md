@@ -22,8 +22,8 @@ By week 4 (already done): write, compile, and debug a Black-Scholes pricer from 
 | 2 | Functions + control flow; bond pricer | [projects/week02/bond_pricer.cpp](projects/week02/bond_pricer.cpp) | Complete |
 | 3 | Collections + summary statistics; returns stats tool | [projects/week03/price_series.cpp](projects/week03/price_series.cpp) | Complete |
 | 4 | **Milestone 1** — Black-Scholes pricer with delta and vega | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | Complete |
-| 5 | Memory model (stack/heap, pointers, references); normal RNG harness | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | In progress |
-| 6 | Classes + RAII; GBM Monte Carlo option pricer | — | Not started |
+| 5 | Memory model (stack/heap, pointers, references); normal RNG harness | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | Complete |
+| 6 | Classes + RAII; GBM Monte Carlo option pricer | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | In progress (Day 4 complete) |
 | 7 | File I/O; CSV loader + returns summary | — | Not started |
 | 8 | **Milestone 2** — Monte Carlo VaR on real historical data | — | Not started |
 | 9 | STL containers + algorithms; OHLC bar aggregator | — | Not started |
@@ -65,10 +65,20 @@ Full Black-Scholes call and put pricer. Includes:
 - Vega: S * sqrt(T) * phi(d1)
 - Put-call parity assertion across 20 varied input sets (ITM, OTM, ATM; T from 1 to 20; sigma from 0.1 to 0.9) — all pass at tolerance 1e-10
 
-### Week 5 — Normal RNG harness (in progress)
+### Week 5 — Normal RNG harness
 `projects/week05/rng_harness.cpp`
 
-Generates N(0,1) samples using `std::mt19937` + `std::normal_distribution`. Acceptance criteria: mean in [-0.005, 0.005], standard deviation in [0.995, 1.005], same seed reproduces byte-for-byte. Both criteria currently green.
+Generates N(0,1) samples using `std::mt19937` + `std::normal_distribution`. Acceptance criteria: mean in [-0.005, 0.005], standard deviation in [0.995, 1.005], same seed reproduces byte-for-byte. Both criteria green.
+
+### Week 6 — GBM Monte Carlo option pricer (in progress)
+`projects/week06/mc_pricer.h` / `mc_pricer.cpp`
+
+Three classes:
+- `NormalSampler` — wraps `mt19937` + `normal_distribution`; seeded at construction
+- `GBMSimulator` — simulates one GBM path: S(t+dt) = S(t) · exp((r − σ²/2)·dt + σ·√dt·Z). GBM (geometric Brownian motion) is the standard model for stock price paths under the Black-Scholes assumptions.
+- `MCPricer` — runs N paths, computes mean discounted payoff max(S_T − K, 0). At N=100,000: price 10.4384 vs Black-Scholes closed form 10.45 — within convergence band.
+
+All three headers compile clean under `-Wall -Wextra -std=c++20`. No raw `new`/`delete` (RAII throughout).
 
 ---
 

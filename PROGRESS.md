@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W6 Day 4 — code review on `NormalSampler`, `GBMSimulator`, `MCPricer` (Claude as Code Reviewer per AGENTS.md); open with MC convergence retrieval.
-**Retrieval question:** "Without looking: what are the three roles of `*` in C++? Give one example of each."
-**Carry-forwards:** MC convergence O(1/√N) re-test due 2026-05-17; three roles of `*` closing check scored 1/2 (declaration example: wrote `double* p = 5.0` — should be `double x = 5.0; double* p = &x;`).
+**First action:** W6 Day 5 — acceptance test run: compile and verify MC price converges to BS within 3×(stdev/√N) at N=100k; update TASKS.md; write retrospective.
+**Retrieval question:** "Without looking: why does making `_simulator` a member variable (instead of a local inside `price_call()`) change the output when `price_call()` is called twice?"
+**Carry-forwards:** MC convergence O(1/√N) re-test due 2026-05-17; three roles of `*` re-test due 2026-05-21.
 
 ---
 
 - **Today's date:** 2026-05-14
-- **Curriculum week:** 6 of 16 — **In progress (Day 3 complete)**
-- **Days into curriculum:** 13 (calendar) / 24 sessions complete
+- **Curriculum week:** 6 of 16 — **In progress (Day 4 complete)**
+- **Days into curriculum:** 13 (calendar) / 25 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w6_d2.md](notes/w6_d2.md) | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | [projects/week06/mc_pricer.cpp](projects/week06/mc_pricer.cpp)
+- **Today's artifact:** [notes/w6_d4.md](notes/w6_d4.md) | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h)
+
+- **W6 Day 4 wins:**
+  - Three roles of `*` carry-forward: 3/3 clean. Declaration example corrected (`&x` not `5.0`). **[FIRST TIME]** carry-forward cleared on opening retrieval.
+  - Code review completed: `NormalSampler`, `GBMSimulator`, `MCPricer` — zero blocking issues.
+  - `MCPricer` refactored: seed and steps promoted to constructor parameters; `_simulator` promoted to member variable; redundant private fields removed; reorder warning fixed.
+  - RNG state continuity understood: fresh-local vs persistent-member distinction articulated correctly — "contiguous RNG state maintained across calls."
+  - `reserve()` rationale understood: one upfront allocation vs repeated realloc on `push_back`.
+  - Zero compiler warnings under `-Wall -Wextra -std=c++20`; output 10.4384 confirmed.
 
 - **W6 Day 3 wins:**
   - Three roles of `*`: 3/3 clean. All named and exemplified correctly. Precision point: in declaration, `*` is part of the type, not an operator (`double* p, q;` trap).
@@ -196,6 +204,9 @@
 | 2026-05-03 | `std::accumulate` double precision loss (W3 Day 3b) | Mechanism (rounding errors compound) correct direction; confused "exponentiate" with additive accumulation; large-total / small-element precision floor understood after one worked example; correctly applied to price_series.cpp variance — no loss there | 2026-05-10 |
 | 2026-05-03 | Log vs simple returns — additivity (W3 Day 3c) | Direction (time vs cross-section) retrieved unaided; ln product rule identity written correctly; cancellation of intermediate P₁ derived after one prompt; full mechanism clean by end | 2026-05-10 |
 
+| 2026-05-14 | Three roles of `*` — W6 Day 4 opening carry-forward | 3/3 clean. Declaration corrected: `double* p = &x`. **[FIRST TIME]** carry-forward cleared. | 2026-05-21 |
+| 2026-05-14 | Member vs local variable — RNG state continuity | Articulated correctly: fresh local resets seed each call (same paths); member persists RNG state (independent path batches). | 2026-05-21 |
+| 2026-05-14 | Three roles of `*` — W6 Day 4 closing check | 2/2 unaided. Identical to opening answer. Clean sweep both ends of session. | 2026-05-21 |
 | 2026-05-14 | Three roles of `*` — W6 Day 3 retrieval | 3/3 clean. Declaration (`double* p`), read-dereference (`double q = *p`), write-dereference (`*p = 20.0`). "Pointer on left/right" shortcut noted. | 2026-05-21 |
 | 2026-05-14 | `push_back` vs pre-initialized `counts[i]++` — W6 Day 3 retrieval | 2/2 — sharpest version yet. Fixed-size counter vector vs dynamic append. | 2026-05-21 |
 | 2026-05-14 | Member initializer list syntax — W6 Day 3 retrieval | 2/2 **[FIRST TIME]** Correct after flagged failure in W6 Day 1. Values in `()`, not type names. | 2026-05-21 |

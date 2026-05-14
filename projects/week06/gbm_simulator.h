@@ -17,7 +17,8 @@ public:
 
     std::vector<double> simulate_path(){
 
-        std::vector<double> S_vec {};
+        std::vector<double> S_vec; 
+        S_vec.reserve(_steps + 1);
         S_vec.push_back(_S0);
         double dt = _T / _steps;
         

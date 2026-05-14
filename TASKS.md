@@ -6,15 +6,17 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-_Nothing. W6 Day 3 complete._
+_Nothing. W6 Day 4 complete._
 
 ## Next (queued, ordered)
 
-- **W6 Day 4 (2h)** — Code review: Claude acts as Code Reviewer on full W6 codebase (`NormalSampler`, `GBMSimulator`, `MCPricer`). Fix blocking issues. Opening retrieval: MC convergence O(1/√N).
+- **W6 Day 5 (1h)** — Acceptance test run: compile and verify MC price converges to BS within 3×(stdev/√N) at N=100k; update TASKS.md; write W6 retrospective.
 - **Re-test 2026-05-17** — MC convergence O(1/√N); BS inputs + directions; σ asymmetry one-sentence; range-for vs index loop.
-- **Re-test 2026-05-21** — Three roles of `*`; `push_back` vs pre-initialized increment; member initializer list syntax.
+- **Re-test 2026-05-21** — Three roles of `*`; `push_back` vs pre-initialized increment; member initializer list syntax; RNG state continuity (member vs local).
 
 ## Done
+
+- **2026-05-14 — W6 Day 4: Code review complete. MCPricer refactored.** All four review findings resolved: naming convention fixed; seed and steps promoted to constructor parameters; `_simulator` promoted to persistent member variable (RNG state now continuous across `price_call()` calls); `reserve()` added to `GBMSimulator`. Zero compiler warnings under `-Wall -Wextra -std=c++20`. Price 10.4384 confirmed. Opening retrieval 3/3 clean — three roles of `*` carry-forward cleared [FIRST TIME]. RNG state continuity concept articulated correctly on closing check. Artifact: [notes/w6_d4.md](notes/w6_d4.md) | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h).
 
 - **2026-05-14 — W6 Day 3: Retrieval practice complete + MC convergence concept landed.** Three roles of `*` 3/3 clean. `push_back` vs `counts[i]++` 2/2 — sharpest version yet. Member initializer list 2/2 [FIRST TIME after W6 Day 1 failure]. MC convergence O(1/√N): σ/√N recalled from W3; 4×N → half error derived algebraically; 100× paths for 10× error reduction correct unaided. Artifact: [notes/w6_d3.md](notes/w6_d3.md).
 
