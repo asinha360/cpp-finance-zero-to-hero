@@ -6,15 +6,17 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-_Nothing. W6 Day 4 complete._
+_Nothing. W6 complete._
 
 ## Next (queued, ordered)
 
-- **W6 Day 5 (1h)** — Acceptance test run: compile and verify MC price converges to BS within 3×(stdev/√N) at N=100k; update TASKS.md; write W6 retrospective.
+- **W7 Day 1 (2h)** — File I/O concept intro: `<fstream>`, `std::string`, `std::getline`, simple tokenization. Establish `.cpp` = standalone program convention. Why returns not prices.
 - **Re-test 2026-05-17** — MC convergence O(1/√N); BS inputs + directions; σ asymmetry one-sentence; range-for vs index loop.
-- **Re-test 2026-05-21** — Three roles of `*`; `push_back` vs pre-initialized increment; member initializer list syntax; RNG state continuity (member vs local).
+- **Re-test 2026-05-21** — Three roles of `*`; `push_back` vs pre-initialized increment; member initializer list syntax; RNG state continuity (member vs local); SE = stdev of sample mean.
 
 ## Done
+
+- **2026-05-14 — W6 Day 5: Acceptance test passed. Week 6 complete.** Both criteria green: MC price 10.4384 inside 3-SE band [10.2802, 10.5609] containing BS 10.4502; no raw `new`/`delete`. `price_call()` extended to return `std::pair<double,double>` (discounted mean + stdev); structured binding used in `main()`. One-pass variance formula applied; `(p-p)` bug caught and fixed. SE concept landed: stdev of sample mean, not payoff stdev. Retrospective at [projects/week06/retrospective.md](projects/week06/retrospective.md). Artifacts: [notes/w6_d5.md](notes/w6_d5.md).
 
 - **2026-05-14 — W6 Day 4: Code review complete. MCPricer refactored.** All four review findings resolved: naming convention fixed; seed and steps promoted to constructor parameters; `_simulator` promoted to persistent member variable (RNG state now continuous across `price_call()` calls); `reserve()` added to `GBMSimulator`. Zero compiler warnings under `-Wall -Wextra -std=c++20`. Price 10.4384 confirmed. Opening retrieval 3/3 clean — three roles of `*` carry-forward cleared [FIRST TIME]. RNG state continuity concept articulated correctly on closing check. Artifact: [notes/w6_d4.md](notes/w6_d4.md) | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h).
 

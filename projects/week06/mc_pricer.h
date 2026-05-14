@@ -15,17 +15,20 @@ class MCPricer {
 
         }
 
-        double price_call(){
+        std::pair<double, double> price_call(){
 
             double payoff_sum = 0.0;
-            
+            double payoff_sq_sum = 0.0;
 
             for( int i = 0; i < _N; i++){
                 std::vector<double> sim_vec = _simulator.simulate_path();
-                payoff_sum += std::max(sim_vec.back() - _K, 0.0);
+                double p = std::max(sim_vec.back() - _K, 0.0);
+                payoff_sum += p;
+                payoff_sq_sum += p * p;
             }
-
-            return (payoff_sum / _N) * std::exp( -_r * _T);
+            double variance = (payoff_sq_sum / _N) - ( (payoff_sum / _N) * (payoff_sum / _N));
+            double stddev    = sqrt(variance);
+            return {(payoff_sum / _N) * std::exp( -_r * _T), stddev * std::exp( -_r * _T)};
         }
 
     private:

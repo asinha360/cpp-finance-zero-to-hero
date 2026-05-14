@@ -57,4 +57,32 @@ Non-trivial choices, one entry each. Date, decision, reason, what would flip it.
 
 ---
 
+---
+
+## 2026-05-14 — Return type for `price_call()`: `std::pair` vs struct vs two methods
+
+**Context.** W6 Day 5 acceptance test requires both the MC price (mean of discounted payoffs) and the stdev of those payoffs. `price_call()` previously returned only a `double`. Three options were available at W6 skill level.
+
+**Options considered:**
+
+1. **`std::pair<double,double>`** — built-in; no new type needed; caller uses structured binding `auto [price, stdev] = ...`.
+2. **Named struct** — defines a new type (e.g., `struct PriceResult { double price; double stdev; }`); most readable at call site; requires defining the struct in the header.
+3. **Two separate methods** — `price_call()` returns mean; `price_call_stdev()` returns stdev; caller makes two calls, each re-running N paths.
+
+**Decision.** Use `std::pair<double,double>`.
+
+**Reasoning:**
+- User has not yet been introduced to struct syntax; introducing it here would be scope creep on a Day 5 admin session.
+- Two separate methods would either duplicate the N-path loop (expensive and inconsistent) or require shared mutable state — both are worse designs.
+- `std::pair` requires no new concepts beyond what's needed and ships with C++17 structured binding syntax the user already has.
+
+**Consequences:**
+- Good: zero new syntax; caller is clean; both values computed in one pass.
+- Bad: `first`/`second` field names are opaque if the structured binding is not used; a future reader of the raw pair has no semantic labels.
+- Reversibility: cheap — replace return type with a named struct in W15 when code hygiene is the focus.
+
+**Review date:** 2026-11-14
+
+---
+
 **Explicitly deferred / rejected.** Full Xcode IDE, GCC via Homebrew, Conan/vcpkg, Docker, valgrind — reasons noted in [setup.md](setup.md) "Deliberately omitted" section.

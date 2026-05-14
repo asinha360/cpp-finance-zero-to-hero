@@ -3,18 +3,27 @@
 ## Current state
 ## Next session
 
-**First action:** W6 Day 5 — acceptance test run: compile and verify MC price converges to BS within 3×(stdev/√N) at N=100k; update TASKS.md; write retrospective.
-**Retrieval question:** "Without looking: why does making `_simulator` a member variable (instead of a local inside `price_call()`) change the output when `price_call()` is called twice?"
-**Carry-forwards:** MC convergence O(1/√N) re-test due 2026-05-17; three roles of `*` re-test due 2026-05-21.
+**First action:** W7 Day 1 — File I/O concept intro: `<fstream>`, `std::getline`, tokenization. Establish `.cpp` = standalone program convention before writing any new file.
+**Retrieval question:** "Without looking: what is the standard error, and why does dividing by √N shrink the payoff stdev (14.79) down to ~0.047? Name the theorem."
+**Carry-forwards:** SE definition + CLT reason (due 2026-05-21); MC convergence O(1/√N), BS inputs, σ asymmetry, range-for vs index loop (due 2026-05-17); three roles of `*`, member initializer list, RNG state continuity (due 2026-05-21).
 
 ---
 
 - **Today's date:** 2026-05-14
-- **Curriculum week:** 6 of 16 — **In progress (Day 4 complete)**
+- **Curriculum week:** 6 of 16 — **Complete**
 - **Days into curriculum:** 13 (calendar) / 25 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w6_d4.md](notes/w6_d4.md) | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h)
+- **Today's artifact:** [notes/w6_d5.md](notes/w6_d5.md) | [projects/week06/retrospective.md](projects/week06/retrospective.md)
+
+- **W6 Day 5 wins:**
+  - Acceptance test passed: MC price 10.4384 inside band [10.2802, 10.5609] containing BS 10.4502. Zero warnings, exit 0. **[FIRST TIME]** assert-based convergence test written from scratch.
+  - `std::pair<double,double>` introduced: `price_call()` extended to return discounted mean and stdev; structured binding `auto [price, stddev]` used correctly in `main()`.
+  - One-pass variance formula applied: `sum_sq/N - mean^2`. Bug caught: `(p-p)*p` → corrected to `p*p` independently after one coaching question.
+  - Standard error concept landed: SE = stdev of sample mean across runs (not stdev of individual payoffs). Payoff stdev 14.79 vs SE 0.047 — distinction confirmed understood.
+  - 3-sigma band: 99.73% coverage from CLT; "3" is not from convergence rate but from normal distribution. Python visual confirmed before C++ implementation.
+  - Opening carry-forward cleared: `_simulator` member vs local — correct mechanism unaided. **[FIRST TIME]** cleared without scaffolding.
+  - Retrospective written at [projects/week06/retrospective.md](projects/week06/retrospective.md). **Week 6 complete.**
 
 - **W6 Day 4 wins:**
   - Three roles of `*` carry-forward: 3/3 clean. Declaration example corrected (`&x` not `5.0`). **[FIRST TIME]** carry-forward cleared on opening retrieval.
@@ -142,7 +151,7 @@
 | 3 | Collections + summary statistics; returns stats tool | **Complete** | 2026-04-29 | 2026-05-03 | [projects/week03/price_series.cpp](projects/week03/price_series.cpp) | [projects/week03/retrospective.md](projects/week03/retrospective.md) |
 | 4 | **MILESTONE 1** — Black-Scholes pricer with Δ, ν | **Complete** | 2026-05-03 | 2026-05-06 | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | [projects/week04/retrospective.md](projects/week04/retrospective.md) |
 | 5 | Memory model + first RNG; normal RNG harness | **Complete** | 2026-05-07 | 2026-05-11 | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | [projects/week05/retrospective.md](projects/week05/retrospective.md) |
-| 6 | Classes + RAII; GBM MC option pricer | **In progress** | 2026-05-11 | — | [projects/week06/gbm_simulator.cpp](projects/week06/gbm_simulator.cpp) | — |
+| 6 | Classes + RAII; GBM MC option pricer | **Complete** | 2026-05-11 | 2026-05-14 | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | [projects/week06/retrospective.md](projects/week06/retrospective.md) |
 | 7 | File I/O; CSV loader + returns summary | Not started | — | — | — | — |
 | 8 | **MILESTONE 2** — Monte Carlo VaR on real data | Not started | — | — | — | — |
 | 9 | STL containers + algorithms; OHLC bar aggregator | Not started | — | — | — | — |
@@ -204,6 +213,13 @@
 | 2026-05-03 | `std::accumulate` double precision loss (W3 Day 3b) | Mechanism (rounding errors compound) correct direction; confused "exponentiate" with additive accumulation; large-total / small-element precision floor understood after one worked example; correctly applied to price_series.cpp variance — no loss there | 2026-05-10 |
 | 2026-05-03 | Log vs simple returns — additivity (W3 Day 3c) | Direction (time vs cross-section) retrieved unaided; ln product rule identity written correctly; cancellation of intermediate P₁ derived after one prompt; full mechanism clean by end | 2026-05-10 |
 
+| 2026-05-14 | Member vs local `_simulator` — W6 Day 5 opening carry-forward | 2/2 unaided. Mechanism correct: local resets seed → identical paths; member maintains stream → independent estimates. One precision fix: "correlated" → "independent." **[FIRST TIME]** cleared without scaffolding. | 2026-05-21 |
+| 2026-05-14 | Standard error — what SE measures | 1/2. First answer: "estimates" (close, one word short). After one prompt: SE = stdev of the *sample mean* — how much the MC price bounces across runs with different seeds. Payoff stdev vs SE of mean distinction confirmed. | 2026-05-21 |
+| 2026-05-14 | Why divide by √N (CLT reason) | 0/2. Said "because distribution is wildly skewed" — wrong reason. Skewness explains large numerator (14.79); division by √N comes from CLT (sampling distribution of mean). Full explanation needed. | 2026-05-21 |
+| 2026-05-14 | What does "3" in 3×SE mean | 0/2. Said "error halves every 2 decimal places" — confused with O(1/√N) convergence rate. Full explanation needed: 3-sigma from normal distribution, 99.73% coverage. | 2026-05-21 |
+| 2026-05-14 | payoff_sq_sum accumulation — `p * p` | 1/2. First attempt: `(p-p)*(p-p)` (always zero — confused square-of-value with deviation-from-mean). One hint: "what is p squared?" → corrected to `p * p`. | 2026-05-21 |
+| 2026-05-14 | Discounting stdev consistently | 2/2 unaided. Independently applied `* std::exp(-_r * _T)` to stdev return without prompting — recognized mean and stdev must be on the same scale. | 2026-05-21 |
+| 2026-05-14 | Member vs local `_simulator` — W6 Day 5 closing check | 2/2 unaided. Self-corrected "correlated" → "independent" without prompting — improvement over opening answer. Clean sweep both ends of session. | 2026-05-21 |
 | 2026-05-14 | Three roles of `*` — W6 Day 4 opening carry-forward | 3/3 clean. Declaration corrected: `double* p = &x`. **[FIRST TIME]** carry-forward cleared. | 2026-05-21 |
 | 2026-05-14 | Member vs local variable — RNG state continuity | Articulated correctly: fresh local resets seed each call (same paths); member persists RNG state (independent path batches). | 2026-05-21 |
 | 2026-05-14 | Three roles of `*` — W6 Day 4 closing check | 2/2 unaided. Identical to opening answer. Clean sweep both ends of session. | 2026-05-21 |
