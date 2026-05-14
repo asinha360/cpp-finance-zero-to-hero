@@ -3,18 +3,24 @@
 ## Current state
 ## Next session
 
-**First action:** W6 Day 3 — retrieval practice session. Open with: `push_back` vs pre-initialized increment (due 2026-05-14); three roles of `*` (due 2026-05-15); T& vs T* (due 2026-05-15). Then introduce MC convergence rate O(1/√N).
-**Retrieval question (opening W6 Day 3):** "Without looking: what are the three roles of `*` in C++? Give one example of each."
-**Carry-forwards into W6 Day 3:** `push_back` vs pre-initialized increment still due 2026-05-14; MC convergence O(1/√N) not yet tested.
+**First action:** W6 Day 4 — code review on `NormalSampler`, `GBMSimulator`, `MCPricer` (Claude as Code Reviewer per AGENTS.md); open with MC convergence retrieval.
+**Retrieval question:** "Without looking: what are the three roles of `*` in C++? Give one example of each."
+**Carry-forwards:** MC convergence O(1/√N) re-test due 2026-05-17; three roles of `*` closing check scored 1/2 (declaration example: wrote `double* p = 5.0` — should be `double x = 5.0; double* p = &x;`).
 
 ---
 
-- **Today's date:** 2026-05-13
-- **Curriculum week:** 6 of 16 — **In progress (Day 2 complete)**
+- **Today's date:** 2026-05-14
+- **Curriculum week:** 6 of 16 — **In progress (Day 3 complete)**
 - **Days into curriculum:** 13 (calendar) / 24 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
 - **Today's artifact:** [notes/w6_d2.md](notes/w6_d2.md) | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | [projects/week06/mc_pricer.cpp](projects/week06/mc_pricer.cpp)
+
+- **W6 Day 3 wins:**
+  - Three roles of `*`: 3/3 clean. All named and exemplified correctly. Precision point: in declaration, `*` is part of the type, not an operator (`double* p, q;` trap).
+  - `push_back` vs pre-initialized `counts[i]++`: 2/2 — sharpest version yet. "Fixed-size vector of counters vs dynamic append" articulated correctly with histogram context.
+  - Member initializer list syntax: 2/2. **[FIRST TIME]** Correct after one failed attempt in W6 Day 1. Values in `()`, not type names.
+  - MC convergence O(1/√N): concept landed. σ/√N recalled from W3 unaided. Quadrupling N halves error derived algebraically. 100× paths for 10× error reduction correct unaided. Initial "exponential" intuition corrected.
 
 - **W6 Day 2 wins:**
   - σ²/2 mechanism articulated in one sentence after one numerical hint: "e^x is convex — upside lifts more than downside drops; σ²/2 subtracts the excess so expected price grows at exactly r." Jensen's inequality cleared.
@@ -189,6 +195,12 @@
 | 2026-05-03 | Bond pricer re-implementation from scratch (W3 Day 3a) | Structure recalled correctly; formula used `r` instead of `y` in denominator — caught and self-corrected after one prompt; sum lower bound started at `i=2`, corrected after one prompt; code compiled and logic verified correct | 2026-05-10 |
 | 2026-05-03 | `std::accumulate` double precision loss (W3 Day 3b) | Mechanism (rounding errors compound) correct direction; confused "exponentiate" with additive accumulation; large-total / small-element precision floor understood after one worked example; correctly applied to price_series.cpp variance — no loss there | 2026-05-10 |
 | 2026-05-03 | Log vs simple returns — additivity (W3 Day 3c) | Direction (time vs cross-section) retrieved unaided; ln product rule identity written correctly; cancellation of intermediate P₁ derived after one prompt; full mechanism clean by end | 2026-05-10 |
+
+| 2026-05-14 | Three roles of `*` — W6 Day 3 retrieval | 3/3 clean. Declaration (`double* p`), read-dereference (`double q = *p`), write-dereference (`*p = 20.0`). "Pointer on left/right" shortcut noted. | 2026-05-21 |
+| 2026-05-14 | `push_back` vs pre-initialized `counts[i]++` — W6 Day 3 retrieval | 2/2 — sharpest version yet. Fixed-size counter vector vs dynamic append. | 2026-05-21 |
+| 2026-05-14 | Member initializer list syntax — W6 Day 3 retrieval | 2/2 **[FIRST TIME]** Correct after flagged failure in W6 Day 1. Values in `()`, not type names. | 2026-05-21 |
+| 2026-05-14 | MC convergence O(1/√N) — first test | Concept landed. σ/√N recalled unaided. 4×N → half error derived correctly. 100× paths for 10× error reduction correct. Initial "exponential" intuition corrected to square root. | 2026-05-17 |
+| 2026-05-14 | Three roles of `*` — closing retrieval check | 1/2. Roles named correctly; declaration example wrong: `double* p = 5.0` is a compile error (pointer holds address, not value). Opening answer same session had `&x` correct. Re-test: 2026-05-17 (carry-forward). | 2026-05-17 |
 
 | 2026-05-13 | GBM formula from memory — W6 Day 2 opening re-test | Full credit. Structure correct; drift/shock split correct; `rt` notation ambiguity flagged (should be `r`, not `r*t`). | 2026-05-20 |
 | 2026-05-13 | σ²/2 mechanism — W6 Day 2 re-test (opening) | 1/2. Named "log-normal asymmetry correction" correctly; needed numerical hint (e^0.1+e^-0.1)/2=1.005; then articulated full mechanism cleanly. | 2026-05-20 |
