@@ -6,15 +6,15 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-_Nothing. W6 complete._
+- **W7 Day 2 (2h)** — Solo implementation: add `std::stod` conversion, accumulate prices into `std::vector<double>`, compute mean. Guard `stod` with try/catch for `std::invalid_argument`.
 
 ## Next (queued, ordered)
-
-- **W7 Day 1 (2h)** — File I/O concept intro: `<fstream>`, `std::string`, `std::getline`, simple tokenization. Establish `.cpp` = standalone program convention. Why returns not prices.
-- **Re-test 2026-05-17** — MC convergence O(1/√N); BS inputs + directions; σ asymmetry one-sentence; range-for vs index loop.
-- **Re-test 2026-05-21** — Three roles of `*`; `push_back` vs pre-initialized increment; member initializer list syntax; RNG state continuity (member vs local); SE = stdev of sample mean.
+- **Re-test 2026-05-21** — MC convergence O(1/√N); BS inputs + directions; σ asymmetry one-sentence; range-for vs index loop (overdue from 2026-05-17); SE/CLT conflation; stream-as-bool; `\n` escape; `break` vs `continue` use-case.
+- **Re-test 2026-05-21** — Three roles of `*`; `push_back` vs pre-initialized increment; member initializer list syntax; RNG state continuity (member vs local).
 
 ## Done
+
+- **2026-05-18 — W7 Day 1: File I/O concept intro complete.** `std::ifstream`, `std::getline`, `find`/`substr` tokenization, malformed-row guard (`npos` check + `continue`), stream-as-bool loop condition, `\n` vs `endl` vs `/n`. `csv_loader.cpp` compiles zero warnings; 5 good rows printed, `BADROW` guard fires to stderr. SE/CLT carry-forward improved: CLT mechanism articulated correctly, skewness-as-cause conflation corrected. `std::stod` introduced (meaning + return type retrieved unaided **[FIRST TIME]**). Artifact: [notes/w7_d1.md](notes/w7_d1.md).
 
 - **2026-05-14 — W6 Day 5: Acceptance test passed. Week 6 complete.** Both criteria green: MC price 10.4384 inside 3-SE band [10.2802, 10.5609] containing BS 10.4502; no raw `new`/`delete`. `price_call()` extended to return `std::pair<double,double>` (discounted mean + stdev); structured binding used in `main()`. One-pass variance formula applied; `(p-p)` bug caught and fixed. SE concept landed: stdev of sample mean, not payoff stdev. Retrospective at [projects/week06/retrospective.md](projects/week06/retrospective.md). Artifacts: [notes/w6_d5.md](notes/w6_d5.md).
 

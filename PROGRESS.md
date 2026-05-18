@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W7 Day 1 — File I/O concept intro: `<fstream>`, `std::getline`, tokenization. Establish `.cpp` = standalone program convention before writing any new file.
-**Retrieval question:** "Without looking: what is the standard error, and why does dividing by √N shrink the payoff stdev (14.79) down to ~0.047? Name the theorem."
-**Carry-forwards:** SE definition + CLT reason (due 2026-05-21); MC convergence O(1/√N), BS inputs, σ asymmetry, range-for vs index loop (due 2026-05-17); three roles of `*`, member initializer list, RNG state continuity (due 2026-05-21).
+**First action:** W7 Day 2 — Solo: add `std::stod`, `std::vector<double>` accumulation, mean computation, try/catch guard on stod. No coaching until stuck.
+**Retrieval question:** "Without looking: what does `while (std::getline(file, line))` evaluate to when the file runs out of lines, and why?"
+**Carry-forwards:** MC convergence O(1/√N), BS inputs, σ asymmetry, range-for vs index loop (overdue from 2026-05-17); SE/CLT conflation, stream-as-bool, `\n` escape, `break` vs `continue` use-case (due 2026-05-21); three roles of `*`, member initializer list, RNG state continuity (due 2026-05-21).
 
 ---
 
-- **Today's date:** 2026-05-14
-- **Curriculum week:** 6 of 16 — **Complete**
-- **Days into curriculum:** 13 (calendar) / 25 sessions complete
+- **Today's date:** 2026-05-18
+- **Curriculum week:** 7 of 16 — **In progress**
+- **Days into curriculum:** 15 (calendar) / 26 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w6_d5.md](notes/w6_d5.md) | [projects/week06/retrospective.md](projects/week06/retrospective.md)
+- **Today's artifact:** [notes/w7_d1.md](notes/w7_d1.md) | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp)
+
+- **W7 Day 1 wins:**
+  - SE/CLT carry-forward improved from 0/2 → partial: CLT mechanism stated correctly; skewness-as-cause conflation corrected after coaching. Follow-up check ("symmetric payoffs — still divide by √N?") answered correctly unaided.
+  - File I/O model understood: `std::ifstream` as stream pipe; `std::getline` as loop condition (stream → bool). Initially confused stream return with `npos` — corrected after explanation.
+  - Tokenization implemented correctly on first attempt: `find(',')`, `substr(0, pos)`, `substr(pos+1)`. `npos` guard with `continue` applied correctly.
+  - `\n` vs `endl` vs `/n` bug caught and corrected: `"/n"` prints literal `/n`; `"\n"` is the newline escape; `endl` = newline + flush (slower, unnecessary).
+  - `std::stod` introduced: "string to double"; returns `double`; throws on bad input. Meaning + return type retrieved unaided. **[FIRST TIME]**
+  - `csv_loader.cpp` compiles zero warnings under `-Wall -Wextra -std=c++20`; output correct; malformed-row guard fires to stderr.
 
 - **W6 Day 5 wins:**
   - Acceptance test passed: MC price 10.4384 inside band [10.2802, 10.5609] containing BS 10.4502. Zero warnings, exit 0. **[FIRST TIME]** assert-based convergence test written from scratch.
@@ -260,6 +268,13 @@
 | 2026-05-07 | References vs pointers — null, rebinding, syntax | Differences stated correctly unaided after explanation | 2026-05-14 |
 | 2026-05-07 | `const&` — performance and safety | "no copy + read-only promise" retrieved correctly; O(1) framing sharpened to "no allocation" | 2026-05-14 |
 | 2026-05-07 | RNG seeding — purpose and reproducibility | Reasoned from first principles without knowing the term — [FIRST TIME] unaided | 2026-05-14 |
+
+| 2026-05-18 | SE / CLT — carry-forward re-test (was 0/2 W6D5) | 1/2 opening. Closing check: 2/2 unaided. Skewness → large numerator (14.79); CLT → √N division; SE = spread of sample means. Causal chain clean. Carry-forward cleared. | — |
+| 2026-05-18 | Stream-as-bool loop condition | 0/2. Said "returns npos." Corrected: `getline` returns the stream; stream converts to bool based on last operation state. | 2026-05-21 |
+| 2026-05-18 | `\n` escape vs `/n` literal vs `endl` | 0/2. Said `"/n"` prints newline; said fix is `endl`. Corrected: `"/n"` is literal `/n`; `"\n"` is newline escape; `endl` = newline + flush (slower). | 2026-05-21 |
+| 2026-05-18 | `break` vs `continue` — mechanics | 2/2. Break exits loop; continue skips to next iteration. Both correct. | 2026-05-25 |
+| 2026-05-18 | `break` vs `continue` — CSV use-case | 1/2. Said break is right for "reporting" — corrected: reporting is a print statement (independent); `continue` is right for CSV (one bad row shouldn't discard the rest). | 2026-05-21 |
+| 2026-05-18 | `std::stod` — meaning and return type | 2/2 unaided. "String to double"; returns `double`. **[FIRST TIME]** | 2026-05-25 |
 
 ## Blockers / questions parked for later
 - (none yet)
