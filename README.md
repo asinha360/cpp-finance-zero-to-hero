@@ -24,7 +24,7 @@ By week 4 (already done): write, compile, and debug a Black-Scholes pricer from 
 | 4 | **Milestone 1** — Black-Scholes pricer with delta and vega | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | Complete |
 | 5 | Memory model (stack/heap, pointers, references); normal RNG harness | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | Complete |
 | 6 | Classes + RAII; GBM Monte Carlo option pricer | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | Complete |
-| 7 | File I/O; CSV loader + returns summary | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | In progress (Day 2 complete) |
+| 7 | File I/O; CSV loader + returns summary | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | In progress (Day 3 complete) |
 | 8 | **Milestone 2** — Monte Carlo VaR on real historical data | — | Not started |
 | 9 | STL containers + algorithms; OHLC bar aggregator | — | Not started |
 | 10 | Polymorphism; SMA-crossover strategy | — | Not started |

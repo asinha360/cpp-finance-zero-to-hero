@@ -3,9 +3,9 @@
 ## Current state
 ## Next session
 
-**First action:** W7 Day 3 — closed-book retrieval: write from memory (1) what `getline` returns and why the loop stops; (2) `continue` structural rule — why position in the loop body determines whether it matters; (3) any three from the overdue carry-forwards (MC convergence O(1/√N), BS inputs + directions, σ asymmetry, range-for vs index loop).
-**Retrieval question:** "Without looking: a `continue` near the top of a loop body vs. one at the very end — structurally, why does position matter? Which one in csv_loader.cpp was redundant, which was load-bearing, and why?"
-**Carry-forwards:** `continue` structural rule (0/2 2026-05-19); `break`/`continue` use-case (due 2026-05-21); `\n` escape (due 2026-05-21); MC convergence O(1/√N) (overdue 2026-05-17); BS inputs + directions (overdue 2026-05-17); σ asymmetry (overdue 2026-05-17); range-for vs index loop (overdue 2026-05-17); three roles of `*`; member initializer list; RNG state continuity (due 2026-05-21).
+**First action:** W7 Day 4 — code review of csv_loader.cpp + extend to compute log returns and stdev to satisfy W7 acceptance test.
+**Retrieval question:** "Without looking: what is stationarity, and why does a non-stationary price series make the sample mean a misleading statistic?"
+**Carry-forwards:** σ asymmetry precision — "expected payoff scales with distance past K" (due 2026-05-21); `break`/`continue` use-case (due 2026-05-21); RNG state continuity (due 2026-05-21); stationarity (first introduced 2026-05-19, due 2026-05-22); `>>` vs `getline` delimiter difference (first introduced 2026-05-19, due 2026-05-22).
 
 ---
 
@@ -14,7 +14,17 @@
 - **Days into curriculum:** 15 (calendar) / 27 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w7_d2.md](notes/w7_d2.md) | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp)
+- **Today's artifact:** [notes/w7_d3.md](notes/w7_d3.md)
+
+- **W7 Day 3 wins:**
+  - `continue` structural rule: 1/2 opening → 2/2 after one coaching pass. Applied correctly to csv_loader.cpp: npos `continue` = load-bearing (substr/stod/catch below it); end-of-catch `continue` = redundant. Carry-forward cleared.
+  - MC convergence O(1/√N): 2/2 unaided. CLT → SE = stdev/√N → 4×N halves error. Derived from first principles. Carry-forward cleared.
+  - Range-for vs index loop: 2/2 after coaching. Initially reversed examples; corrected to: range-for requires existing collection; index loop when no collection (repeat-N). Carry-forward cleared.
+  - BS inputs + directions: 5/5 unaided. All five inputs and directions correct. Carry-forward cleared.
+  - σ asymmetry precision: "probability of reaching strike" corrected to "expected payoff scales with distance past K." Re-test due 2026-05-21.
+  - `\n` vs `/n` vs `endl`: improved from 0/2 (W7D1) to 2/2. "clears" → "flushes" for `endl` corrected. Carry-forward cleared.
+  - Stationarity: introduced — returns are approximately stationary (stable mean/variance); prices are not (drift with price level). **[FIRST TIME]**
+  - `>>` vs `getline` delimiter: introduced — `>>` splits on all whitespace; `getline` reads to `\n`. **[FIRST TIME]**
 
 - **W7 Day 2 wins:**
   - `std::stod` conversion applied correctly; `try/catch` on `std::invalid_argument` placed correctly per-row inside loop.
@@ -281,6 +291,15 @@
 | 2026-05-19 | Stream-as-bool closing check | 2/2 unaided — "`getline` returns the stream itself; `while` converts to bool — true if last read succeeded, false if EOF or error." Full answer, no prompting. **Carry-forward cleared.** | — |
 | 2026-05-19 | npos+1 overflow chain — why BADROW printed twice | 2/2 unaided — correct mechanical trace: npos `continue` missing → falls through → npos+1 wraps → substr(0) → stod throws → catch fires | — |
 | 2026-05-19 | `continue` structural rule: top-of-body vs. end-of-body | 0/2 — said "before the mean calculation" (mean is outside the loop); full explanation needed | 2026-05-21 |
+
+| 2026-05-19 | `continue` structural rule — W7D3 retest | 1/2 opening (mechanism only) → 2/2 after applying to csv_loader.cpp. npos guard = load-bearing; end-of-catch = redundant. **Carry-forward cleared.** Closing check: 2/2 unaided — same answer delivered cleanly end-of-session. | — |
+| 2026-05-19 | MC convergence O(1/√N) — spaced retest (overdue 2026-05-17) | 2/2 unaided. CLT → SE = stdev/√N → 4×N halves error. Derived from first principles. **Carry-forward cleared.** | — |
+| 2026-05-19 | Range-for vs index loop — spaced retest (overdue 2026-05-17) | 2/2 after coaching. Initially reversed examples. Corrected to: range-for needs existing collection; index loop when no collection (repeat-N). **Carry-forward cleared.** | — |
+| 2026-05-19 | BS inputs + directions — spaced retest (overdue 2026-05-17) | 5/5 unaided. All five inputs and directions correct. **Carry-forward cleared.** | — |
+| 2026-05-19 | σ asymmetry precision — "probability vs distance past K" | 1/2. Floor + unlimited upside mechanism correct. "Probability of reaching strike" corrected to "expected payoff scales with distance past K." | 2026-05-21 |
+| 2026-05-19 | `\n` vs `/n` vs `endl` — spaced retest (was 0/2 on 2026-05-18) | 2/2. "clears" → "flushes" for `endl` corrected. **Carry-forward cleared.** | — |
+| 2026-05-19 | Stationarity — why returns not prices | 1/2. Reached "mean/variance stable for returns" after one coaching pass. Term "stationarity" introduced. **[FIRST TIME]** | 2026-05-22 |
+| 2026-05-19 | `>>` vs `getline` delimiter difference | Introduced. `>>` splits on all whitespace; `getline` reads to `\n`. **[FIRST TIME]** | 2026-05-22 |
 
 | 2026-05-18 | SE / CLT — carry-forward re-test (was 0/2 W6D5) | 1/2 opening. Closing check: 2/2 unaided. Skewness → large numerator (14.79); CLT → √N division; SE = spread of sample means. Causal chain clean. Carry-forward cleared. | — |
 | 2026-05-18 | Stream-as-bool loop condition | 0/2. Said "returns npos." Corrected: `getline` returns the stream; stream converts to bool based on last operation state. | 2026-05-21 |

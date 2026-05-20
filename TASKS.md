@@ -6,13 +6,16 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-- **W7 Day 3 (1h)** — Closed-book retrieval practice: stream-as-bool, `continue` structural rule (0/2 this session), and overdue carry-forwards (MC convergence O(1/√N), BS inputs + directions, σ asymmetry, range-for vs index loop). Written retrieval only — no code.
+- **W7 Day 4 (2h)** — Code review of csv_loader.cpp + extend to compute log returns and stdev to satisfy W7 acceptance test (1000-row CSV, mean/stdev to 1e-6 vs Python reference).
 
 ## Next (queued, ordered)
-- **Re-test 2026-05-21** — MC convergence O(1/√N); BS inputs + directions; σ asymmetry one-sentence; range-for vs index loop (overdue from 2026-05-17); SE/CLT conflation; stream-as-bool; `\n` escape; `break` vs `continue` use-case.
-- **Re-test 2026-05-21** — Three roles of `*`; `push_back` vs pre-initialized increment; member initializer list syntax; RNG state continuity (member vs local).
+- **Re-test 2026-05-21** — σ asymmetry precision ("expected payoff scales with distance past K"); `break`/`continue` use-case; RNG state continuity (member vs local).
+- **Re-test 2026-05-22** — Stationarity (first introduced 2026-05-19); `>>` vs `getline` delimiter difference.
+- **W7 Day 5 (1h)** — Acceptance test run + retrospective.
 
 ## Done
+
+- **2026-05-19 — W7 Day 3: Closed-book retrieval complete.** Five overdue carry-forwards cleared: `continue` structural rule, MC convergence O(1/√N), range-for vs index loop, BS inputs + directions, `\n` escape. σ asymmetry precision sharpened ("probability of reaching strike" → "expected payoff scales with distance past K") — re-test due 2026-05-21. Two new concepts introduced: stationarity (why returns are analyzed not prices) and `>>` vs `getline` delimiter difference. Artifact: [notes/w7_d3.md](notes/w7_d3.md).
 
 - **2026-05-19 — W7 Day 2: csv_loader.cpp extended.** `std::stod` conversion, `std::vector<double>` accumulation, mean computation, empty-vector guard (`if (!price_vec.empty())`), `try/catch` on `std::invalid_argument`. Compiles zero warnings under `-Wall -Wextra -std=c++20`; five good rows loaded; `BADROW` reported once to stderr; mean 477.832 correct. Bugs caught and fixed: missing `#include <vector>`; division by zero on empty vector (`NaN` via IEEE 754, not UB — corrected belief); load-bearing `continue` accidentally removed from npos guard (restored). `continue` structural rule introduced but scored 0/2 — carry-forward to Day 3. Artifact: [notes/w7_d2.md](notes/w7_d2.md).
 
