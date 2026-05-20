@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W7 Day 2 — Solo: add `std::stod`, `std::vector<double>` accumulation, mean computation, try/catch guard on stod. No coaching until stuck.
-**Retrieval question:** "Without looking: what does `while (std::getline(file, line))` evaluate to when the file runs out of lines, and why?"
-**Carry-forwards:** MC convergence O(1/√N), BS inputs, σ asymmetry, range-for vs index loop (overdue from 2026-05-17); SE/CLT conflation, stream-as-bool, `\n` escape, `break` vs `continue` use-case (due 2026-05-21); three roles of `*`, member initializer list, RNG state continuity (due 2026-05-21).
+**First action:** W7 Day 3 — closed-book retrieval: write from memory (1) what `getline` returns and why the loop stops; (2) `continue` structural rule — why position in the loop body determines whether it matters; (3) any three from the overdue carry-forwards (MC convergence O(1/√N), BS inputs + directions, σ asymmetry, range-for vs index loop).
+**Retrieval question:** "Without looking: a `continue` near the top of a loop body vs. one at the very end — structurally, why does position matter? Which one in csv_loader.cpp was redundant, which was load-bearing, and why?"
+**Carry-forwards:** `continue` structural rule (0/2 2026-05-19); `break`/`continue` use-case (due 2026-05-21); `\n` escape (due 2026-05-21); MC convergence O(1/√N) (overdue 2026-05-17); BS inputs + directions (overdue 2026-05-17); σ asymmetry (overdue 2026-05-17); range-for vs index loop (overdue 2026-05-17); three roles of `*`; member initializer list; RNG state continuity (due 2026-05-21).
 
 ---
 
-- **Today's date:** 2026-05-18
+- **Today's date:** 2026-05-19
 - **Curriculum week:** 7 of 16 — **In progress**
-- **Days into curriculum:** 15 (calendar) / 26 sessions complete
+- **Days into curriculum:** 15 (calendar) / 27 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w7_d1.md](notes/w7_d1.md) | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp)
+- **Today's artifact:** [notes/w7_d2.md](notes/w7_d2.md) | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp)
+
+- **W7 Day 2 wins:**
+  - `std::stod` conversion applied correctly; `try/catch` on `std::invalid_argument` placed correctly per-row inside loop.
+  - `std::accumulate` with `0.0` (double, not int) — correct on first attempt.
+  - Empty-vector guard: `if (!price_vec.empty())` with `cerr` + `return 1` — correct after one coaching pass (initial proposal `assert(price_vec.empty())` had inverted condition and wrong tool).
+  - IEEE 754 float div/0 distinguished from integer UB: `0.0/0.0 = NaN`, not undefined behaviour — corrected belief; connected to W4 silent-return anti-pattern independently.
+  - npos+1 overflow chain traced unaided when double-print bug appeared: "if(npos) block & catch both print malformed row — removed continue for the if so execution reaches second one."
+  - Zero warnings under `-Wall -Wextra -std=c++20`; mean 477.832 verified correct.
 
 - **W7 Day 1 wins:**
   - SE/CLT carry-forward improved from 0/2 → partial: CLT mechanism stated correctly; skewness-as-cause conflation corrected after coaching. Follow-up check ("symmetric payoffs — still divide by √N?") answered correctly unaided.
@@ -268,6 +276,11 @@
 | 2026-05-07 | References vs pointers — null, rebinding, syntax | Differences stated correctly unaided after explanation | 2026-05-14 |
 | 2026-05-07 | `const&` — performance and safety | "no copy + read-only promise" retrieved correctly; O(1) framing sharpened to "no allocation" | 2026-05-14 |
 | 2026-05-07 | RNG seeding — purpose and reproducibility | Reasoned from first principles without knowing the term — [FIRST TIME] unaided | 2026-05-14 |
+
+| 2026-05-19 | Stream-as-bool opening re-test (W7D1 scored 0/2) | 1/2 — mechanism correct (bool conversion, true=success, false=EOF/error); missed that `getline` returns the stream; one hint needed | — |
+| 2026-05-19 | Stream-as-bool closing check | 2/2 unaided — "`getline` returns the stream itself; `while` converts to bool — true if last read succeeded, false if EOF or error." Full answer, no prompting. **Carry-forward cleared.** | — |
+| 2026-05-19 | npos+1 overflow chain — why BADROW printed twice | 2/2 unaided — correct mechanical trace: npos `continue` missing → falls through → npos+1 wraps → substr(0) → stod throws → catch fires | — |
+| 2026-05-19 | `continue` structural rule: top-of-body vs. end-of-body | 0/2 — said "before the mean calculation" (mean is outside the loop); full explanation needed | 2026-05-21 |
 
 | 2026-05-18 | SE / CLT — carry-forward re-test (was 0/2 W6D5) | 1/2 opening. Closing check: 2/2 unaided. Skewness → large numerator (14.79); CLT → √N division; SE = spread of sample means. Causal chain clean. Carry-forward cleared. | — |
 | 2026-05-18 | Stream-as-bool loop condition | 0/2. Said "returns npos." Corrected: `getline` returns the stream; stream converts to bool based on last operation state. | 2026-05-21 |
