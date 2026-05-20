@@ -3,9 +3,19 @@
     "allow": [
       "Read(//Users/sniperzero360/my-first-workspace/**)",
       "Read(//Users/sniperzero360/.claude/**)",
-      "Bash(g++ -Wall -Wextra -std=c++20 -o pv pv.cpp)",
-      "Bash(./pv)",
       "Bash(echo \"EXIT_CODE: $?\")"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /Users/sniperzero360/.vault/watcher.py --force-sync --project /Users/sniperzero360/my-first-workspace/cpp-finance-zero-to-hero"
+          }
+        ]
+      }
     ]
   }
 }

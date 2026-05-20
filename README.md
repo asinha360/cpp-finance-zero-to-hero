@@ -23,8 +23,8 @@ By week 4 (already done): write, compile, and debug a Black-Scholes pricer from 
 | 3 | Collections + summary statistics; returns stats tool | [projects/week03/price_series.cpp](projects/week03/price_series.cpp) | Complete |
 | 4 | **Milestone 1** — Black-Scholes pricer with delta and vega | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | Complete |
 | 5 | Memory model (stack/heap, pointers, references); normal RNG harness | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | Complete |
-| 6 | Classes + RAII; GBM Monte Carlo option pricer | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | In progress (Day 4 complete) |
-| 7 | File I/O; CSV loader + returns summary | — | Not started |
+| 6 | Classes + RAII; GBM Monte Carlo option pricer | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | Complete |
+| 7 | File I/O; CSV loader + returns summary | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | In progress (Day 2 complete) |
 | 8 | **Milestone 2** — Monte Carlo VaR on real historical data | — | Not started |
 | 9 | STL containers + algorithms; OHLC bar aggregator | — | Not started |
 | 10 | Polymorphism; SMA-crossover strategy | — | Not started |
@@ -70,15 +70,25 @@ Full Black-Scholes call and put pricer. Includes:
 
 Generates N(0,1) samples using `std::mt19937` + `std::normal_distribution`. Acceptance criteria: mean in [-0.005, 0.005], standard deviation in [0.995, 1.005], same seed reproduces byte-for-byte. Both criteria green.
 
-### Week 6 — GBM Monte Carlo option pricer (in progress)
-`projects/week06/mc_pricer.h` / `mc_pricer.cpp`
+### Week 6 — GBM Monte Carlo option pricer
+`projects/week06/mc_pricer.h` / `mc_pricer.cpp` (plus `normal_sampler.h/.cpp`, `gbm_simulator.h/.cpp`)
 
-Three classes:
-- `NormalSampler` — wraps `mt19937` + `normal_distribution`; seeded at construction
+Three classes across a header/source split:
+- `NormalSampler` — wraps `mt19937` + `normal_distribution`; seeded at construction; RNG state persists across calls
 - `GBMSimulator` — simulates one GBM path: S(t+dt) = S(t) · exp((r − σ²/2)·dt + σ·√dt·Z). GBM (geometric Brownian motion) is the standard model for stock price paths under the Black-Scholes assumptions.
-- `MCPricer` — runs N paths, computes mean discounted payoff max(S_T − K, 0). At N=100,000: price 10.4384 vs Black-Scholes closed form 10.45 — within convergence band.
+- `MCPricer` — runs N paths, returns `std::pair<double,double>` (discounted mean payoff, discounted stdev). At N=100,000: price 10.4384 inside 3-SE band [10.2802, 10.5609] containing BS closed form 10.4502.
 
-All three headers compile clean under `-Wall -Wextra -std=c++20`. No raw `new`/`delete` (RAII throughout).
+Zero warnings under `-Wall -Wextra -std=c++20`. No raw `new`/`delete` (RAII throughout). Acceptance criteria: MC price inside 3-SE convergence band, exit 0 — both green.
+
+### Week 7 — CSV loader + returns summary (in progress)
+`projects/week07/csv_loader.cpp`
+
+Reads a CSV of `date,price` rows from disk, skips malformed rows (missing comma, non-numeric price), accumulates valid prices into a `std::vector<double>`, and prints the count and mean price. Key mechanisms:
+- `std::ifstream` + `std::getline` as a loop condition (stream-to-bool conversion); `find`/`substr` tokenization
+- `std::stod` for string-to-double conversion; `try/catch` on `std::invalid_argument` per row so one bad row does not abort the parse
+- Empty-vector guard: `if (!price_vec.empty())` before division; bad rows reported to `std::cerr`
+
+Day 2 result: five good rows loaded, mean 477.832, one `BADROW` correctly caught and reported. Zero warnings under `-Wall -Wextra -std=c++20`.
 
 ---
 

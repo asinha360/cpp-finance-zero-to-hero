@@ -16,3 +16,8 @@ projects/week04/bs_pricer
 projects/week04/ytm
 projects/week05/pv
 projects/week05/rng
+projects/week05/rng_harness
+projects/week06/gbm
+projects/week06/mc_pricer
+projects/week06/sampler
+projects/week07/csv_loader
