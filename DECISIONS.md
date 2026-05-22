@@ -85,4 +85,20 @@ Non-trivial choices, one entry each. Date, decision, reason, what would flip it.
 
 ---
 
+## 2026-05-21 — Reuse of price_series stats functions in csv_loader: header vs inline copy
+
+**Context.** W7 Day 4: csv_loader.cpp needs `mean` and `standard_deviation` functions already written in [projects/week03/price_series.cpp](projects/week03/price_series.cpp). User proposed converting price_series.cpp into a header and `#include`-ing it.
+
+**Decision.** Copy the two functions directly into csv_loader.cpp rather than creating a shared header.
+
+**Reasoning:**
+- csv_loader.cpp is a standalone program, not a library. No other file needs these functions.
+- A shared header would add two new files and a compile step for zero practical benefit at this scale.
+- CLAUDE.md rule: "smallest diff that solves the problem; no new abstractions for cases that can't happen."
+- The user correctly reasoned to this conclusion independently after one architectural question.
+
+**What would flip it.** When W8 (Monte Carlo VaR) needs the same stats functions and a third file also needs them — at that point extract to a `stats.h` / `stats.cpp` pair. Three callers is the natural threshold for a shared utility.
+
+---
+
 **Explicitly deferred / rejected.** Full Xcode IDE, GCC via Homebrew, Conan/vcpkg, Docker, valgrind — reasons noted in [setup.md](setup.md) "Deliberately omitted" section.

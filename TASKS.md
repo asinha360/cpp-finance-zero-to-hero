@@ -6,14 +6,15 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-- **W7 Day 4 (2h)** — Code review of csv_loader.cpp + extend to compute log returns and stdev to satisfy W7 acceptance test (1000-row CSV, mean/stdev to 1e-6 vs Python reference).
+- **W7 Day 5 (1h)** — Generate 1000-row CSV, run acceptance test (mean/stdev to 1e-6 vs Python reference), write W7 retrospective.
 
 ## Next (queued, ordered)
-- **Re-test 2026-05-21** — σ asymmetry precision ("expected payoff scales with distance past K"); `break`/`continue` use-case; RNG state continuity (member vs local).
-- **Re-test 2026-05-22** — Stationarity (first introduced 2026-05-19); `>>` vs `getline` delimiter difference.
-- **W7 Day 5 (1h)** — Acceptance test run + retrospective.
+- **Re-test next session** — σ asymmetry precision ("expected payoff scales with distance past K"); RNG state continuity ("identical" not "correlated").
+- **Re-test 2026-05-22** — `>>` vs `getline` delimiter difference.
 
 ## Done
+
+- **2026-05-21 — W7 Day 4: csv_loader extended to log returns + code review complete.** `log_returns` function written from scratch — correct index loop with `< size() - 1` bound, `const std::vector<double>&` parameter. `mean` and `sample_variance` copied from price_series.cpp with fixes: silent `return 0.0` / `return EXIT_SUCCESS` anti-pattern replaced with `assert`. Output formatting fixed. Verified against Python reference: mean 0.000932505, stdev 0.0143042 — match to 7 significant figures. Zero warnings under `-Wall -Wextra -std=c++20`. Artifact: [notes/w7_d4.md](notes/w7_d4.md).
 
 - **2026-05-19 — W7 Day 3: Closed-book retrieval complete.** Five overdue carry-forwards cleared: `continue` structural rule, MC convergence O(1/√N), range-for vs index loop, BS inputs + directions, `\n` escape. σ asymmetry precision sharpened ("probability of reaching strike" → "expected payoff scales with distance past K") — re-test due 2026-05-21. Two new concepts introduced: stationarity (why returns are analyzed not prices) and `>>` vs `getline` delimiter difference. Artifact: [notes/w7_d3.md](notes/w7_d3.md).
 

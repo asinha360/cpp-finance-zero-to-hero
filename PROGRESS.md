@@ -3,20 +3,30 @@
 ## Current state
 ## Next session
 
-**First action:** W7 Day 4 — code review of csv_loader.cpp + extend to compute log returns and stdev to satisfy W7 acceptance test.
-**Retrieval question:** "Without looking: what is stationarity, and why does a non-stationary price series make the sample mean a misleading statistic?"
-**Carry-forwards:** σ asymmetry precision — "expected payoff scales with distance past K" (due 2026-05-21); `break`/`continue` use-case (due 2026-05-21); RNG state continuity (due 2026-05-21); stationarity (first introduced 2026-05-19, due 2026-05-22); `>>` vs `getline` delimiter difference (first introduced 2026-05-19, due 2026-05-22).
+**First action:** W7 Day 5 — generate 1000-row CSV, run acceptance test (mean/stdev to 1e-6 vs Python reference), write W7 retrospective.
+**Retrieval question:** "Without looking: what is the difference between `>>` and `getline` as CSV parsers — specifically what delimiter each uses and what breaks if you use `>>` on a CSV with spaces in fields?"
+**Carry-forwards:** σ asymmetry precision — "expected payoff scales with distance past K" (re-test); RNG state continuity — "identical" not "correlated" (re-test); `>>` vs `getline` delimiter difference (due 2026-05-22).
 
 ---
 
-- **Today's date:** 2026-05-19
+- **Today's date:** 2026-05-21
 - **Curriculum week:** 7 of 16 — **In progress**
-- **Days into curriculum:** 15 (calendar) / 27 sessions complete
+- **Days into curriculum:** 17 (calendar) / 28 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w7_d3.md](notes/w7_d3.md)
+- **Today's artifact:** [notes/w7_d4.md](notes/w7_d4.md)
 
-- **W7 Day 3 wins:**
+- **W7 Day 4 wins:**
+  - log_returns function written from scratch: correct `const std::vector<double>&` parameter, index loop with `< size() - 1` bound, `std::log(price_vec[i+1] / price_vec[i])`. Four bugs caught and fixed: range-for-as-index error, comma vs semicolon, off-by-one (went wrong direction first), missing `&` in parameter.
+  - Silent return 0.0 anti-pattern caught again in copied functions — `return EXIT_SUCCESS` (== 0) identified as same issue as W4/W5. Fixed to `assert(!returns.empty())` and `assert(returns.size() >= 2)`.
+  - Output formatting bug caught: `log_mean << std_dev` with no separator. Fixed to separate labelled lines.
+  - Verified against Python reference: mean 0.000932505, stdev 0.0143042 — match to 7 significant figures. Zero warnings under `-Wall -Wextra -std=c++20`.
+  - Stationarity (due 2026-05-22, tested one day early): 2/2 after one build-up question. "Prices trend — the sample mean of years 1–5 differs from years 6–10 because the price level has drifted." Improved from 1/2 at introduction.
+  - `break`/`continue` use-case: 2/2 — "continue because 1 row doesn't make the input invalid." Carry-forward cleared.
+  - σ asymmetry precision: 1.5/2. Same error as W7D3 — "raises probability of ending ITM" vs "expected payoff scales with distance past K." Re-test next session.
+  - RNG state continuity: 1.5/2. Mechanism correct; said "correlated" instead of "identical." Same precision error as W6D5. Re-test next session.
+
+- **W7 Day 3 wins:****
   - `continue` structural rule: 1/2 opening → 2/2 after one coaching pass. Applied correctly to csv_loader.cpp: npos `continue` = load-bearing (substr/stod/catch below it); end-of-catch `continue` = redundant. Carry-forward cleared.
   - MC convergence O(1/√N): 2/2 unaided. CLT → SE = stdev/√N → 4×N halves error. Derived from first principles. Carry-forward cleared.
   - Range-for vs index loop: 2/2 after coaching. Initially reversed examples; corrected to: range-for requires existing collection; index loop when no collection (repeat-N). Carry-forward cleared.
@@ -286,6 +296,12 @@
 | 2026-05-07 | References vs pointers — null, rebinding, syntax | Differences stated correctly unaided after explanation | 2026-05-14 |
 | 2026-05-07 | `const&` — performance and safety | "no copy + read-only promise" retrieved correctly; O(1) framing sharpened to "no allocation" | 2026-05-14 |
 | 2026-05-07 | RNG seeding — purpose and reproducibility | Reasoned from first principles without knowing the term — [FIRST TIME] unaided | 2026-05-14 |
+
+| 2026-05-21 | Stationarity — why prices are non-stationary (due 2026-05-22, tested one day early) | 2/2 after one build-up question (opening). Closing check: 2/2 unaided — "prices trend and bounce around, so the mean of a given time period is completely different to that of a different one, whereas log returns represent the same rate of change regardless of price level." Improved from 1/2 at introduction. Carry-forward cleared. | — |
+| 2026-05-21 | σ asymmetry precision — "expected payoff scales with distance past K" | 1.5/2. Mechanism correct; still saying "probability of ending ITM" instead of "expected payoff scales with distance past K." Same error as W7D3. | 2026-05-22 |
+| 2026-05-21 | `break`/`continue` use-case — CSV context | 2/2. "continue because 1 bad row doesn't make the input invalid." Clean. **Carry-forward cleared.** | — |
+| 2026-05-21 | RNG state continuity — local vs member `_simulator` | 1.5/2. Mechanism correct (local resets seed → same paths each call; member persists state). Said "correlated" instead of "identical." Same precision error as W6D5. | 2026-05-22 |
+| 2026-05-21 | Range-for vs index loop — applied in code | Error in first attempt: used range-for to index into vector (`price_vec[i+1]` where `i` is a `double`). Self-corrected after one question. Concept retrieved correctly (2/2) but not yet solid in code. | 2026-05-28 |
 
 | 2026-05-19 | Stream-as-bool opening re-test (W7D1 scored 0/2) | 1/2 — mechanism correct (bool conversion, true=success, false=EOF/error); missed that `getline` returns the stream; one hint needed | — |
 | 2026-05-19 | Stream-as-bool closing check | 2/2 unaided — "`getline` returns the stream itself; `while` converts to bool — true if last read succeeded, false if EOF or error." Full answer, no prompting. **Carry-forward cleared.** | — |
