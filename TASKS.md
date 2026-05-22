@@ -6,13 +6,15 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-- **W7 Day 5 (1h)** — Generate 1000-row CSV, run acceptance test (mean/stdev to 1e-6 vs Python reference), write W7 retrospective.
+- **W8 Day 1 (2h)** — Concept intro: three VaR methods (historical, parametric, MC); derive each from first principles. *(Confirm to start.)*
 
 ## Next (queued, ordered)
-- **Re-test next session** — σ asymmetry precision ("expected payoff scales with distance past K"); RNG state continuity ("identical" not "correlated").
-- **Re-test 2026-05-22** — `>>` vs `getline` delimiter difference.
+- **Re-test opening of W8 Day 1** — `>>` vs `getline` delimiter difference (due 2026-05-22); RNG state continuity ("identical" not "correlated").
+- **W8 Days 2–5** — Build MC VaR model on real historical data (Milestone 2).
 
 ## Done
+
+- **2026-05-21 — W7 Day 5: Acceptance test green + retrospective written. Week 7 complete.** 1000-row CSV generated; Python reference computed (mean −0.000277786, stdev 0.0152992); csv_loader matched to <1e-8 — criterion 1e-6 passed. Three BADROW entries caught to stderr. Retrospective at [projects/week07/retrospective.md](projects/week07/retrospective.md). σ asymmetry opening retrieval: 1/2 (one coaching pass for floor/asymmetry mechanism). Artifact: [notes/w7_d5.md](notes/w7_d5.md).
 
 - **2026-05-21 — W7 Day 4: csv_loader extended to log returns + code review complete.** `log_returns` function written from scratch — correct index loop with `< size() - 1` bound, `const std::vector<double>&` parameter. `mean` and `sample_variance` copied from price_series.cpp with fixes: silent `return 0.0` / `return EXIT_SUCCESS` anti-pattern replaced with `assert`. Output formatting fixed. Verified against Python reference: mean 0.000932505, stdev 0.0143042 — match to 7 significant figures. Zero warnings under `-Wall -Wextra -std=c++20`. Artifact: [notes/w7_d4.md](notes/w7_d4.md).
 

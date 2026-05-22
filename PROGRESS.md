@@ -3,18 +3,18 @@
 ## Current state
 ## Next session
 
-**First action:** W7 Day 5 — generate 1000-row CSV, run acceptance test (mean/stdev to 1e-6 vs Python reference), write W7 retrospective.
+**First action:** W8 Day 1 — open curriculum.md W8 entry, then explain all three VaR methods (historical, parametric, MC) from first principles before touching code.
 **Retrieval question:** "Without looking: what is the difference between `>>` and `getline` as CSV parsers — specifically what delimiter each uses and what breaks if you use `>>` on a CSV with spaces in fields?"
-**Carry-forwards:** σ asymmetry precision — "expected payoff scales with distance past K" (re-test); RNG state continuity — "identical" not "correlated" (re-test); `>>` vs `getline` delimiter difference (due 2026-05-22).
+**Carry-forwards:** σ asymmetry full mechanism ("σ widens both tails; floor at 0 neutralizes downside; only upside benefits"); `>>` vs `getline` delimiter difference (due 2026-05-22); RNG state continuity ("identical" not "correlated").
 
 ---
 
 - **Today's date:** 2026-05-21
-- **Curriculum week:** 7 of 16 — **In progress**
-- **Days into curriculum:** 17 (calendar) / 28 sessions complete
+- **Curriculum week:** 8 of 16 — **Not started**
+- **Days into curriculum:** 17 (calendar) / 29 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w7_d4.md](notes/w7_d4.md)
+- **Today's artifact:** [notes/w7_d5.md](notes/w7_d5.md)
 
 - **W7 Day 4 wins:**
   - log_returns function written from scratch: correct `const std::vector<double>&` parameter, index loop with `< size() - 1` bound, `std::log(price_vec[i+1] / price_vec[i])`. Four bugs caught and fixed: range-for-as-index error, comma vs semicolon, off-by-one (went wrong direction first), missing `&` in parameter.
@@ -188,7 +188,7 @@
 | 4 | **MILESTONE 1** — Black-Scholes pricer with Δ, ν | **Complete** | 2026-05-03 | 2026-05-06 | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | [projects/week04/retrospective.md](projects/week04/retrospective.md) |
 | 5 | Memory model + first RNG; normal RNG harness | **Complete** | 2026-05-07 | 2026-05-11 | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | [projects/week05/retrospective.md](projects/week05/retrospective.md) |
 | 6 | Classes + RAII; GBM MC option pricer | **Complete** | 2026-05-11 | 2026-05-14 | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | [projects/week06/retrospective.md](projects/week06/retrospective.md) |
-| 7 | File I/O; CSV loader + returns summary | Not started | — | — | — | — |
+| 7 | File I/O; CSV loader + returns summary | **Complete** | 2026-05-18 | 2026-05-21 | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | [projects/week07/retrospective.md](projects/week07/retrospective.md) |
 | 8 | **MILESTONE 2** — Monte Carlo VaR on real data | Not started | — | — | — | — |
 | 9 | STL containers + algorithms; OHLC bar aggregator | Not started | — | — | — | — |
 | 10 | Polymorphism; SMA-crossover strategy | Not started | — | — | — | — |
@@ -201,6 +201,7 @@
 
 ## Milestones (from [CONTEXT.md](CONTEXT.md) success criteria)
 - [x] Week 4 — Black-Scholes pricer from scratch
+- [x] Week 7 — CSV loader with File I/O (prerequisite for Milestone 2)
 - [ ] Week 8 — Monte Carlo VaR on real data
 - [ ] Week 12 — Order-book replay backtester
 - [ ] Week 16 — 3 portfolio projects on GitHub
@@ -323,6 +324,9 @@
 | 2026-05-18 | `break` vs `continue` — mechanics | 2/2. Break exits loop; continue skips to next iteration. Both correct. | 2026-05-25 |
 | 2026-05-18 | `break` vs `continue` — CSV use-case | 1/2. Said break is right for "reporting" — corrected: reporting is a print statement (independent); `continue` is right for CSV (one bad row shouldn't discard the rest). | 2026-05-21 |
 | 2026-05-18 | `std::stod` — meaning and return type | 2/2 unaided. "String to double"; returns `double`. **[FIRST TIME]** | 2026-05-25 |
+
+| 2026-05-21 | σ asymmetry — W7 D5 opening retrieval | 1/2. "Expected payoff scales with distance past K" correct; needed one coaching pass to add the asymmetry mechanism (floor at 0, upside unbounded). | — |
+| 2026-05-21 | σ asymmetry — W7 D5 closing check | 1/2. Identical partial answer: "expected payoff scales with distance past K, benefits S_T − K." Floor at 0 / upside-only asymmetry mechanism absent again. Same gap as opening. Carry-forward to W8 D1. | 2026-05-22 |
 
 ## Blockers / questions parked for later
 - (none yet)
