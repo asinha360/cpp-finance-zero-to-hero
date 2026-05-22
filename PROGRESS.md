@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W8 Day 1 — open curriculum.md W8 entry, then explain all three VaR methods (historical, parametric, MC) from first principles before touching code.
-**Retrieval question:** "Without looking: what is the difference between `>>` and `getline` as CSV parsers — specifically what delimiter each uses and what breaks if you use `>>` on a CSV with spaces in fields?"
-**Carry-forwards:** σ asymmetry full mechanism ("σ widens both tails; floor at 0 neutralizes downside; only upside benefits"); `>>` vs `getline` delimiter difference (due 2026-05-22); RNG state continuity ("identical" not "correlated").
+**First action:** W8 Day 2 — solo implementation: create `projects/week08/var_model.cpp` and implement all three VaR methods (historical: sort log returns, `returns[24]` for 95%; parametric: `μ + (−1.645)×σ`; MC: 100k `NormalSampler` draws, sort, index at 5%) without asking for help first.
+**Retrieval question:** "For 500 historical log returns sorted ascending: which single index gives the 95% VaR threshold, and which gives the 99% VaR threshold?"
+**Carry-forwards:** none
 
 ---
 
-- **Today's date:** 2026-05-21
-- **Curriculum week:** 8 of 16 — **Not started**
-- **Days into curriculum:** 17 (calendar) / 29 sessions complete
+- **Today's date:** 2026-05-22
+- **Curriculum week:** 8 of 16 — **In Progress**
+- **Days into curriculum:** 18 (calendar) / 30 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w7_d5.md](notes/w7_d5.md)
+- **Today's artifact:** [notes/w8_d1.md](notes/w8_d1.md)
+
+- **W8 Day 1 wins:**
+  - Three carry-forwards cleared: `>>` vs `getline` (2/2 with one follow-up at opening; 2/2 unaided on closing **[FIRST TIME]**); σ asymmetry full mechanism (2/2 unaided — floor at 0 neutralizes downside, payoff scales with distance past K); RNG state continuity (2/2 unaided — "identical").
+  - Three VaR methods (Value at Risk — loss threshold exceeded only X% of the time) derived from first principles: historical simulation (sort log returns, index at 5%), parametric (μ + z×σ, z = −1.645 for 95%), Monte Carlo (simulate N draws from N(μ,σ), sort, index at 5%).
+  - Fat tails identified as the assumption parametric VaR makes that real equity data violates — consequence articulated correctly 2/2 unaided: "parametric VaR at 99% will be too low compared to real equity returns due to thin tails."
+  - Historical simulation weakness: bounded by observed data; 99% VaR rests on only 5 data points out of 500 — unstable estimate.
+  - Percentile index arithmetic: 95% VaR → index 24 (with one coaching step from range to single index); 99% VaR → index 4 (2/2 unaided).
+  - Toolkit inventory: identified which W5–W7 pieces each VaR method reuses and what is genuinely new (sort + percentile index; z-score constant for parametric; NormalSampler already exists from W6).
 
 - **W7 Day 4 wins:**
   - log_returns function written from scratch: correct `const std::vector<double>&` parameter, index loop with `< size() - 1` bound, `std::log(price_vec[i+1] / price_vec[i])`. Four bugs caught and fixed: range-for-as-index error, comma vs semicolon, off-by-one (went wrong direction first), missing `&` in parameter.
@@ -327,6 +335,17 @@
 
 | 2026-05-21 | σ asymmetry — W7 D5 opening retrieval | 1/2. "Expected payoff scales with distance past K" correct; needed one coaching pass to add the asymmetry mechanism (floor at 0, upside unbounded). | — |
 | 2026-05-21 | σ asymmetry — W7 D5 closing check | 1/2. Identical partial answer: "expected payoff scales with distance past K, benefits S_T − K." Floor at 0 / upside-only asymmetry mechanism absent again. Same gap as opening. Carry-forward to W8 D1. | 2026-05-22 |
+
+| 2026-05-22 | `>>` vs `getline` — opening retrieval (carry-forward due today) | 1/2 — described optional 3-arg form of `getline` rather than default `\n` behavior; answered `\n` correctly after one follow-up. | — |
+| 2026-05-22 | σ asymmetry — carry-forward (due today): floor at 0 + payoff scales with distance past K | 2/2 unaided — full mechanism on first attempt. **Carry-forward cleared.** | — |
+| 2026-05-22 | RNG state continuity — carry-forward (due today): local vs member `_simulator` | 2/2 unaided — "identical" immediately; no "correlated" error. **Carry-forward cleared.** | — |
+| 2026-05-22 | Historical simulation method — identified from hint | 1/2 — said "no idea"; after "most direct possible way using raw data" hint answered correctly. | — |
+| 2026-05-22 | Historical simulation weakness — tail data sparsity | 1/2 — initially described a strength; after coaching (different 2-year windows) reached "bounded by what happened" and "5 data points at 99%." | — |
+| 2026-05-22 | Parametric VaR assumption violation — fat tails | 1/2 — said growth bias first (that's in μ); corrected to fat tails after the term was provided. | — |
+| 2026-05-22 | Parametric VaR at 99%: direction of error | 2/2 unaided — "too low compared to real equity returns due to thin tails." | — |
+| 2026-05-22 | 95% VaR index in 500 sorted returns | 1/2 — gave range 0–24; after "VaR is a single threshold" prompt answered index 24 correctly. | — |
+| 2026-05-22 | 99% VaR index in 500 sorted returns | 2/2 unaided — index 4, 5 observations. | — |
+| 2026-05-22 | `>>` vs `getline` — closing retrieval check | 2/2 unaided — "`getline` uses `\n`, `>>` uses all whitespace; `>>` fragments the row, `getline` hands you the whole row." **[FIRST TIME]** fully unaided; was 1/2 at session open. | — |
 
 ## Blockers / questions parked for later
 - (none yet)
