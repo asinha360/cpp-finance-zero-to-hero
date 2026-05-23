@@ -101,4 +101,31 @@ Non-trivial choices, one entry each. Date, decision, reason, what would flip it.
 
 ---
 
+## 2026-05-22 — VaR function interfaces: pre-computed stats vs raw data
+
+**Context.** W8 Day 2: `parametric_VaR` and `monte_carlo_VaR` both need μ and σ. User initially proposed passing both the raw price vector and pre-computed mean/stddev (redundant). Three options existed: (1) pass raw returns, compute stats inside each function; (2) pass pre-computed mean/stddev; (3) pass both (redundant).
+
+**Decision.** Pre-computed mean/stddev passed by caller — signatures `parametric_VaR(double mean, double stddev)` and `monte_carlo_VaR(double mean, double sigma, int N, unsigned int seed)`.
+
+**Reasoning.**
+- Each VaR function does one job: compute VaR given statistical parameters — not compute stats + compute VaR.
+- Caller (`main`) computes log returns, mean, and stddev once from the loaded data, then passes to all three VaR methods. No repeated computation.
+- Consistent with single-responsibility principle at this stage.
+
+**What would flip it.** If VaR functions need to be unit-tested in isolation (without a caller pre-computing stats), add overloads accepting a returns vector. Not a concern until W15 GoogleTest.
+
+---
+
+## 2026-05-22 — No CSVLoader class; free function load_prices() instead
+
+**Context.** W8 Day 2: user asked whether to create a CSVLoader class wrapping the CSV-reading logic.
+
+**Decision.** Free function `load_prices(const std::string& filepath) → std::vector<double>`. No class.
+
+**Reasoning.** A class is appropriate when an object needs to remember state between calls (e.g., `NormalSampler` holds its RNG engine state across draws). `load_prices` has no state to maintain — it opens a file, reads it, and returns data. A class would add abstraction with zero benefit. User arrived at this conclusion after one coaching question ("what state would it hold between calls?").
+
+**What would flip it.** If we needed to stream a large file in chunks, maintaining a buffer and file position between calls — a class would be appropriate. Not applicable at this project scale.
+
+---
+
 **Explicitly deferred / rejected.** Full Xcode IDE, GCC via Homebrew, Conan/vcpkg, Docker, valgrind — reasons noted in [setup.md](setup.md) "Deliberately omitted" section.

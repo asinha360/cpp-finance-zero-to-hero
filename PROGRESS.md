@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W8 Day 2 — solo implementation: create `projects/week08/var_model.cpp` and implement all three VaR methods (historical: sort log returns, `returns[24]` for 95%; parametric: `μ + (−1.645)×σ`; MC: 100k `NormalSampler` draws, sort, index at 5%) without asking for help first.
-**Retrieval question:** "For 500 historical log returns sorted ascending: which single index gives the 95% VaR threshold, and which gives the 99% VaR threshold?"
-**Carry-forwards:** none
+**First action:** W8 Day 3 — code review of `projects/week08/` as Code Reviewer: check naming, missing guards (empty returns from `load_prices`, file-open failure in `csv_loader`), and output formatting.
+**Retrieval question:** "Write the GBM path formula from memory — both terms with correct notation."
+**Carry-forwards:** GBM formula notation (wrote (σ/2)² instead of σ²/2; 1/2 today)
 
 ---
 
 - **Today's date:** 2026-05-22
 - **Curriculum week:** 8 of 16 — **In Progress**
-- **Days into curriculum:** 18 (calendar) / 30 sessions complete
+- **Days into curriculum:** 18 (calendar) / 31 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w8_d1.md](notes/w8_d1.md)
+- **Today's artifact:** [notes/w8_d2.md](notes/w8_d2.md)
+
+- **W8 Day 2 wins:**
+  - Three-file architecture designed from scratch: csv_loader.h/cpp (adapted from W7), normal_sampler.h (header-only from W6), var_model.h, var_model.cpp — correct separation of declarations and definitions across all files.
+  - All three VaR (Value at Risk) functions implemented: historical_VaR (sort log returns, percentile index), parametric_VaR (μ + z×σ with z = −1.645/−2.326), monte_carlo_VaR (100k NormalSampler draws, sort, percentile index).
+  - Compiled clean, zero warnings under `-Wall -Wextra -std=c++20`. Output: historical −0.0256/−0.0357; parametric −0.0254/−0.0359; MC −0.0254/−0.0359 (95%/99%). Both sanity checks passed.
+  - Key bugs caught and fixed: definitions in header (→ declarations only); `<ifstream>` doesn't exist (→ `<fstream>`); `load_prices()` ignoring filepath parameter; per-row print inside utility function; `std::sort` on `const&` (→ local copy); indexing sorted copy using wrong (unsorted) vector name; loop off-by-one (N+1 → N); z-score digit transposition (−2.236 → −2.326); comma operator in `cout` chain (→ `<<`).
+  - Design reasoning: no CSVLoader class (no state to encapsulate); parametric/MC VaR take pre-computed mean/stddev from caller — caller computes once, passes to all three methods.
+  - GBM formula carry-forward: 1/2 — wrote (σ/2)² instead of σ²/2; self-corrected after one algebraic coaching step.
 
 - **W8 Day 1 wins:**
   - Three carry-forwards cleared: `>>` vs `getline` (2/2 with one follow-up at opening; 2/2 unaided on closing **[FIRST TIME]**); σ asymmetry full mechanism (2/2 unaided — floor at 0 neutralizes downside, payoff scales with distance past K); RNG state continuity (2/2 unaided — "identical").
@@ -197,7 +205,7 @@
 | 5 | Memory model + first RNG; normal RNG harness | **Complete** | 2026-05-07 | 2026-05-11 | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | [projects/week05/retrospective.md](projects/week05/retrospective.md) |
 | 6 | Classes + RAII; GBM MC option pricer | **Complete** | 2026-05-11 | 2026-05-14 | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | [projects/week06/retrospective.md](projects/week06/retrospective.md) |
 | 7 | File I/O; CSV loader + returns summary | **Complete** | 2026-05-18 | 2026-05-21 | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | [projects/week07/retrospective.md](projects/week07/retrospective.md) |
-| 8 | **MILESTONE 2** — Monte Carlo VaR on real data | Not started | — | — | — | — |
+| 8 | **MILESTONE 2** — Monte Carlo VaR on real data | In Progress | 2026-05-22 | — | [projects/week08/var_model.cpp](projects/week08/var_model.cpp) | — |
 | 9 | STL containers + algorithms; OHLC bar aggregator | Not started | — | — | — | — |
 | 10 | Polymorphism; SMA-crossover strategy | Not started | — | — | — | — |
 | 11 | Limit order book with matching | Not started | — | — | — | — |
@@ -346,6 +354,10 @@
 | 2026-05-22 | 95% VaR index in 500 sorted returns | 1/2 — gave range 0–24; after "VaR is a single threshold" prompt answered index 24 correctly. | — |
 | 2026-05-22 | 99% VaR index in 500 sorted returns | 2/2 unaided — index 4, 5 observations. | — |
 | 2026-05-22 | `>>` vs `getline` — closing retrieval check | 2/2 unaided — "`getline` uses `\n`, `>>` uses all whitespace; `>>` fragments the row, `getline` hands you the whole row." **[FIRST TIME]** fully unaided; was 1/2 at session open. | — |
+
+| 2026-05-22 | GBM formula — drift + shock notation (W6 spaced rep, overdue 2026-05-20) | 1/2 — wrote (σ/2)² not σ²/2; self-corrected after "expand that algebraically" coaching step. | 2026-05-23 |
+| 2026-05-22 | VaR index arithmetic — 95% and 99% for 500 returns (W8D1 closing check retested) | 2/2 unaided — index 24 and index 4, both immediate. Improvement from W8D1 where 95% needed one coaching step. | — |
+| 2026-05-22 | Fat tails closing check — parametric VaR understates tail risk at 99% | 2/2 unaided — "real equity returns have fat tails so parametric VaR understates tail risk, too low at 99%." | — |
 
 ## Blockers / questions parked for later
 - (none yet)

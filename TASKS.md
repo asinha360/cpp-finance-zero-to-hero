@@ -6,13 +6,14 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-- **W8 Day 2 (2h)** — Solo implementation: create `projects/week08/var_model.cpp`. Implement historical VaR (sort log returns, `returns[24]` for 95%, `returns[4]` for 99%), parametric VaR (`μ + (−1.645)×σ` for 95%), and MC VaR (100k `NormalSampler` draws, sort, index at 5%). No Claude code until you've attempted it solo.
+- **W8 Day 3 (1h)** — Code review of `projects/week08/` as Code Reviewer: check naming, missing guards (empty returns from `load_prices`, file-open failure in `csv_loader`), output formatting. Retrieval question first: "Write the GBM path formula from memory — both terms with correct notation."
 
 ## Next (queued, ordered)
-- **W8 Days 3–5** — Code review, retrieval practice, acceptance test, retrospective (Milestone 2).
-- **Re-test σ asymmetry at W8 Day 3** — cleared today but was a persistent carry-forward; verify it sticks.
+- **W8 Days 4–5** — Acceptance test, retrospective (Milestone 2).
 
 ## Done
+
+- **2026-05-22 — W8 Day 2: Implementation complete.** All three VaR methods (historical simulation, parametric, Monte Carlo) implemented across five files: csv_loader.h/cpp, normal_sampler.h, var_model.h, var_model.cpp. Compiled clean, zero warnings under `-Wall -Wextra -std=c++20`. Output sanity checks passed: 99% VaR more negative than 95% for all three methods; methods agree within ~0.001. Carry-forward: GBM formula notation (1/2 — wrote (σ/2)² instead of σ²/2). Artifact: [notes/w8_d2.md](notes/w8_d2.md).
 
 - **2026-05-22 — W8 Day 1: VaR concept intro complete.** Three carry-forwards cleared (`>>` vs `getline` 2/2, σ asymmetry 2/2, RNG state continuity 2/2). Three VaR methods derived from first principles: historical simulation (sort returns, percentile index), parametric (μ + z×σ, fat-tail limitation), Monte Carlo (simulate draws, sort, index). Toolkit inventory completed. Percentile index arithmetic confirmed: index 24 for 95% VaR, index 4 for 99% VaR on 500 observations. Artifact: [notes/w8_d1.md](notes/w8_d1.md).
 
