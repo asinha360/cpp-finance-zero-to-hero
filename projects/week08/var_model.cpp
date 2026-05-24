@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cassert>
 #include <algorithm>
 #include <utility>
 #include "var_model.h"
@@ -7,18 +8,23 @@
 #include "csv_loader.h"
 
 
-std::pair<double, double> historical_VaR(const std::vector<double>& log_returns){
+std::pair<double, double> historical_VaR(const std::vector<double>& returns){
 
-    std::vector<double> log_return_cpy = log_returns;
-    std::sort(log_return_cpy.begin(), log_return_cpy.end());
+    std::vector<double> returns_sorted = returns;
+    std::sort(returns_sorted.begin(), returns_sorted.end());
+
+    int n = static_cast<int>(returns_sorted.size());
+    int idx_95 = (n * 5 / 100) - 1;
+    int idx_99 = (n * 1 / 100) - 1;
+    assert(idx_95 >= 0 && idx_99 >= 0 && "Not enough returns for VaR calculation");
     
-    double hist_VaR_95 = log_return_cpy[(log_return_cpy.size() * 5/100) - 1];
-    double hist_VaR_99 = log_return_cpy[(log_return_cpy.size() * 1/100) - 1];
+    double hist_VaR_95 = returns_sorted[idx_95];
+    double hist_VaR_99 = returns_sorted[idx_99];
 
     std::pair<double, double> hist_VaR_pair = {hist_VaR_95, hist_VaR_99};
     return hist_VaR_pair;
 
-};
+}
 
 std::pair<double, double> parametric_VaR(double mean, double stddev){
     
@@ -39,8 +45,14 @@ std::pair<double, double> monte_carlo_VaR(double mean, double sigma, int N, unsi
 
     std::sort(mc_returns.begin(), mc_returns.end());
 
-    double mc_VaR_95 = mc_returns[(mc_returns.size() * 5/100) - 1];
-    double mc_VaR_99 = mc_returns[(mc_returns.size() * 1/100) - 1];
+    int n_mc = static_cast<int>(mc_returns.size());
+    int idx_95 = (n_mc * 5 / 100) - 1;
+    int idx_99 = (n_mc * 1 / 100) - 1;
+    assert(idx_95 >= 0 && idx_99 >= 0 && "Not enough returns for VaR calculation");
+    
+
+    double mc_VaR_95 = mc_returns[idx_95];
+    double mc_VaR_99 = mc_returns[idx_99];
 
     std::pair<double, double> mc_VaR_pair = {mc_VaR_95, mc_VaR_99};
     return mc_VaR_pair;
@@ -58,16 +70,16 @@ int main(){
     std::pair<double, double> mc_VaR_pair = monte_carlo_VaR(mean_val, std_dev_val, 100000, 123);
 
     auto [hvar95, hvar99] = hist_VaR_pair;
-    std::cout << "The historical Simulation VaRs are: " << "\n";
-    std::cout << "95% VaR: " << hvar95 << "||" << "99% VaR: " << hvar99 << "\n";
+    std::cout << "The Historical Simulation VaRs are: " << "\n";
+    std::cout << "95% VaR: " << hvar95 << "  ||  " << "99% VaR: " << hvar99 << "\n";
 
     auto [pvar95, pvar99] = para_VaR_pair;
     std::cout << "The Parametric Simulation VaRs are: " << "\n";
-    std::cout << "95% VaR: " << pvar95 << "||" << "99% VaR: " << pvar99 << "\n";
+    std::cout << "95% VaR: " << pvar95 << "  ||  " << "99% VaR: " << pvar99 << "\n";
 
     auto [mcvar95, mcvar99] = mc_VaR_pair;
     std::cout << "The Monte Carlo Simulation VaRs are: " << "\n";
-    std::cout << "95% VaR: " << mcvar95 << "||" << "99% VaR: " << mcvar99 << "\n";
+    std::cout << "95% VaR: " << mcvar95 << "  ||  " << "99% VaR: " << mcvar99 << "\n";
 
     return 0;
 }

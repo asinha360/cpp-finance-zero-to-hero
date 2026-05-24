@@ -20,7 +20,7 @@ double mean(const std::vector<double>& returns){
     
     double sum = 0.0;
     
-    for (int i = 0; i < (int)returns.size(); i++){
+    for (int i = 0; i < static_cast<int>(returns.size()); i++){
         sum += returns[i];
     }
     
@@ -33,7 +33,7 @@ double sample_variance(const std::vector<double>& returns, double mean_val){
 
     double sum_squared_deviations = 0.0;
 
-    for (int i = 0; i < (int)returns.size(); i++){
+    for (int i = 0; i < static_cast<int>(returns.size()); i++){
         sum_squared_deviations += (returns[i] - mean_val) * (returns[i] - mean_val);
     }
 
@@ -47,11 +47,19 @@ double standard_deviation(const std::vector<double>& returns, double mean_val){
 
 std::vector<double> load_prices(const std::string& filepath){
     std::ifstream file(filepath);
+    
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file: " << filepath << "\n";
+        assert(false);
+    }
+    
     std::string line;
+    
     
     std::getline(file, line);
 
     std::vector<double> price_vec;
+
 
     while (std::getline(file, line)) {
 

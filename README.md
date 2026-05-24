@@ -10,7 +10,9 @@ Every week produces a runnable C++ artifact — a pricer, a backtester, a market
 
 By week 16: three polished GitHub portfolio projects demonstrating pricing, risk modelling, and market-microstructure topics that could survive a quant developer interview.
 
-By week 4 (already done): write, compile, and debug a Black-Scholes pricer from scratch.
+By week 4 (complete): write, compile, and debug a Black-Scholes pricer from scratch.
+
+By week 8 (in progress): build a Monte Carlo VaR model on real historical data.
 
 ---
 
@@ -24,8 +26,8 @@ By week 4 (already done): write, compile, and debug a Black-Scholes pricer from 
 | 4 | **Milestone 1** — Black-Scholes pricer with delta and vega | [projects/week04/bs_pricer.cpp](projects/week04/bs_pricer.cpp) | Complete |
 | 5 | Memory model (stack/heap, pointers, references); normal RNG harness | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | Complete |
 | 6 | Classes + RAII; GBM Monte Carlo option pricer | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | Complete |
-| 7 | File I/O; CSV loader + returns summary | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | In progress (Day 3 complete) |
-| 8 | **Milestone 2** — Monte Carlo VaR on real historical data | — | Not started |
+| 7 | File I/O; CSV loader + returns summary | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | Complete |
+| 8 | **Milestone 2** — Monte Carlo VaR on real historical data | [projects/week08/var_model.cpp](projects/week08/var_model.cpp) | In progress |
 | 9 | STL containers + algorithms; OHLC bar aggregator | — | Not started |
 | 10 | Polymorphism; SMA-crossover strategy | — | Not started |
 | 11 | Limit order book with matching engine | — | Not started |
@@ -80,15 +82,28 @@ Three classes across a header/source split:
 
 Zero warnings under `-Wall -Wextra -std=c++20`. No raw `new`/`delete` (RAII throughout). Acceptance criteria: MC price inside 3-SE convergence band, exit 0 — both green.
 
-### Week 7 — CSV loader + returns summary (in progress)
+### Week 7 — CSV loader + returns summary
 `projects/week07/csv_loader.cpp`
 
-Reads a CSV of `date,price` rows from disk, skips malformed rows (missing comma, non-numeric price), accumulates valid prices into a `std::vector<double>`, and prints the count and mean price. Key mechanisms:
+Reads a CSV of `date,price` rows from disk, skips malformed rows (missing comma, non-numeric price), accumulates valid prices into a `std::vector<double>`, and computes mean price, log returns, and standard deviation. Key mechanisms:
 - `std::ifstream` + `std::getline` as a loop condition (stream-to-bool conversion); `find`/`substr` tokenization
 - `std::stod` for string-to-double conversion; `try/catch` on `std::invalid_argument` per row so one bad row does not abort the parse
 - Empty-vector guard: `if (!price_vec.empty())` before division; bad rows reported to `std::cerr`
 
-Day 2 result: five good rows loaded, mean 477.832, one `BADROW` correctly caught and reported. Zero warnings under `-Wall -Wextra -std=c++20`.
+Output verified against a Python reference to 7 significant figures (mean 0.000932505, stdev 0.0143042). Zero warnings under `-Wall -Wextra -std=c++20`.
+
+### Week 8 — Monte Carlo VaR model (Milestone 2, in progress)
+`projects/week08/var_model.cpp` / `var_model.h`, `csv_loader.h/.cpp`, `normal_sampler.h`
+
+Three-method VaR (Value at Risk) implementation on real historical price data. VaR answers: "what is the minimum loss that will be exceeded only X% of the time?"
+
+- **Historical simulation** — sorts actual log returns, reads off the percentile index directly. No distribution assumption; bounded by what actually happened.
+- **Parametric VaR** — models returns as N(μ, σ) and computes μ + z·σ where z = −1.645 (95%) or −2.326 (99%). Closed-form; underestimates tail risk for real equity data because equity returns have fat tails.
+- **Monte Carlo VaR** — draws 100,000 samples from N(μ, σ) using the `NormalSampler` from Week 6, sorts, reads off percentile index.
+
+Results at 95%/99%: historical −0.0256/−0.0357; parametric −0.0254/−0.0359; Monte Carlo −0.0254/−0.0359. All three methods agree at 95%; the historical method diverges at 99% (fat tails visible). Zero warnings under `-Wall -Wextra -std=c++20`.
+
+Defensive guards (added in code review): `load_prices` asserts on file-open failure before any stream reads, with the actual filepath in the error message; VaR index arithmetic uses signed `int` (not `size_t`) to prevent unsigned wrap on small inputs.
 
 ---
 

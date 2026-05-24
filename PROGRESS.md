@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W8 Day 3 — code review of `projects/week08/` as Code Reviewer: check naming, missing guards (empty returns from `load_prices`, file-open failure in `csv_loader`), and output formatting.
-**Retrieval question:** "Write the GBM path formula from memory — both terms with correct notation."
-**Carry-forwards:** GBM formula notation (wrote (σ/2)² instead of σ²/2; 1/2 today)
+**First action:** W8 Day 4 — implement out-of-sample exceedance frequency check in `var_model.cpp`; compile and confirm all three VaR outputs still match W8 D2 values.
+**Retrieval question:** "What is empirical exceedance frequency — define it precisely and explain why testing it on out-of-sample data is required."
+**Carry-forwards:** empirical exceedance frequency (partial — identified outlier frequency and fat tails; missed precise definition and out-of-sample circularity reasoning)
 
 ---
 
-- **Today's date:** 2026-05-22
+- **Today's date:** 2026-05-24
 - **Curriculum week:** 8 of 16 — **In Progress**
-- **Days into curriculum:** 18 (calendar) / 31 sessions complete
+- **Days into curriculum:** 19 (calendar) / 32 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w8_d2.md](notes/w8_d2.md)
+- **Today's artifact:** [notes/w8_d3.md](notes/w8_d3.md)
+
+- **W8 Day 3 wins:**
+  - GBM formula carry-forward (due 2026-05-23): 2/2 unaided on first attempt — S_next = S_current × e^((r − σ²/2)×dt + σ×√dt×Z). **[FIRST TIME]** clean unaided; scored 1/2 yesterday. Carry-forward cleared.
+  - Code review complete across `csv_loader.cpp` and `var_model.cpp`.
+  - Blocking fix 1 — `load_prices` file-open guard: `if (!file.is_open()) { cerr << filepath; assert(false); }` placed before first `getline`; includes actual filepath in message.
+  - Blocking fix 2 — index arithmetic: `static_cast<int>(size())` into signed `int n`; indices computed as `int`; `assert(idx >= 0)` guards both `historical_VaR` and `monte_carlo_VaR`. User first proposed `static_cast<unsigned int>` on the result — correctly redirected: wrap happens during arithmetic, not after.
+  - Non-blocking fixes: `log_returns` parameter renamed to `returns` in `historical_VaR`; C-style `(int)` casts → `static_cast<int>`; `||` separator spaced; method name capitalization made consistent.
+  - Empirical exceedance frequency concept introduced: rate of days where actual loss exceeds VaR threshold; must test out-of-sample because testing on calibration data is circular (historical VaR by construction always produces exactly 5% exceedances on its own dataset).
 
 - **W8 Day 2 wins:**
   - Three-file architecture designed from scratch: csv_loader.h/cpp (adapted from W7), normal_sampler.h (header-only from W6), var_model.h, var_model.cpp — correct separation of declarations and definitions across all files.
@@ -355,6 +363,8 @@
 | 2026-05-22 | 99% VaR index in 500 sorted returns | 2/2 unaided — index 4, 5 observations. | — |
 | 2026-05-22 | `>>` vs `getline` — closing retrieval check | 2/2 unaided — "`getline` uses `\n`, `>>` uses all whitespace; `>>` fragments the row, `getline` hands you the whole row." **[FIRST TIME]** fully unaided; was 1/2 at session open. | — |
 
+| 2026-05-24 | GBM formula — opening carry-forward (σ²/2 notation, due 2026-05-23) | 2/2 unaided — S_next = S_current × e^((r−σ²/2)×dt + σ×√dt×Z). **[FIRST TIME]** clean unaided after 1/2 yesterday. Carry-forward cleared. | — |
+| 2026-05-24 | GBM formula — closing retrieval check (same question) | 2/2 unaided — drift (r−σ²/2)×dt and shock σ×√dt×Z both correct; σ²/2 notation clean. Outer e^(...) structure implicit but terms correct. | — |
 | 2026-05-22 | GBM formula — drift + shock notation (W6 spaced rep, overdue 2026-05-20) | 1/2 — wrote (σ/2)² not σ²/2; self-corrected after "expand that algebraically" coaching step. | 2026-05-23 |
 | 2026-05-22 | VaR index arithmetic — 95% and 99% for 500 returns (W8D1 closing check retested) | 2/2 unaided — index 24 and index 4, both immediate. Improvement from W8D1 where 95% needed one coaching step. | — |
 | 2026-05-22 | Fat tails closing check — parametric VaR understates tail risk at 99% | 2/2 unaided — "real equity returns have fat tails so parametric VaR understates tail risk, too low at 99%." | — |
