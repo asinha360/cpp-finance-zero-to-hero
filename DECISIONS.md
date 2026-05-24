@@ -128,4 +128,19 @@ Non-trivial choices, one entry each. Date, decision, reason, what would flip it.
 
 ---
 
+## 2026-05-24 — Calibration/out-of-sample split: hardcoded 70/30 at index 350
+
+**Context.** W8 Day 4: `main()` needed to split `log_return_vec` into a calibration window (to compute VaR) and an out-of-sample window (to test exceedance frequency). Split ratio and implementation method needed to be chosen.
+
+**Decision.** Hardcode `split_idx = log_return_vec.begin() + 350`, giving approximately 70% calibration (350 returns) and 30% out-of-sample (remaining ~150 returns).
+
+**Reasoning.**
+- 70/30 is a conventional in-sample/out-of-sample split. At 99% confidence, approximately 1.5 exceedances expected in 150 out-of-sample days — enough to observe the frequency meaningfully.
+- Hardcoding 350 is simpler than computing `(int)(N * 0.7)` at this stage; the data file is fixed.
+- No academic standard mandates a specific split for VaR backtesting; 70/30 is a defensible default.
+
+**What would flip it.** If the data file changes size (different date range loaded), the hardcoded 350 silently becomes the wrong proportion. Fix: compute split index as `static_cast<int>(log_return_vec.size() * 0.7)` and assert that both windows contain enough data for the relevant VaR calculation (calibration needs ≥100 returns; out-of-sample needs ≥100 for 1% exceedance to be observable).
+
+---
+
 **Explicitly deferred / rejected.** Full Xcode IDE, GCC via Homebrew, Conan/vcpkg, Docker, valgrind — reasons noted in [setup.md](setup.md) "Deliberately omitted" section.

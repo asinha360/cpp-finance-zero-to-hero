@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W8 Day 4 — implement out-of-sample exceedance frequency check in `var_model.cpp`; compile and confirm all three VaR outputs still match W8 D2 values.
-**Retrieval question:** "What is empirical exceedance frequency — define it precisely and explain why testing it on out-of-sample data is required."
-**Carry-forwards:** empirical exceedance frequency (partial — identified outlier frequency and fat tails; missed precise definition and out-of-sample circularity reasoning)
+**First action:** W8 Day 5 — add assert-based acceptance checks to `var_model.cpp` (99% VaR > 95% VaR in magnitude; exceedance rates in [0%, 15%]); compile clean; write Week 8 retrospective.
+**Retrieval question:** Parametric VaR produced 6.2% exceedance (expected 5%), historical produced 4.6% — give the distinct reason for each.
+**Carry-forwards:** parametric vs historical exceedance divergence (historical calibration-anchoring side needed one coaching question); `break`/`continue` continue-definition precision (due 2026-05-25)
 
 ---
 
 - **Today's date:** 2026-05-24
 - **Curriculum week:** 8 of 16 — **In Progress**
-- **Days into curriculum:** 19 (calendar) / 32 sessions complete
+- **Days into curriculum:** 19 (calendar) / 33 sessions complete
 - **Schedule status:** On track
 - **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w8_d3.md](notes/w8_d3.md)
+- **Today's artifact:** [notes/w8_d4.md](notes/w8_d4.md)
+
+- **W8 Day 4 wins:**
+  - `exceedance_frequency(const std::vector<double>&, double) → double` implemented and declared. Correct condition (`r < var_threshold`), correct division (`static_cast<double>(count) / total`), correct parameter type (`const std::vector<double>&`).
+  - `main()` split into calibration (350 returns, 70%) and out-of-sample windows using iterator arithmetic: `auto split_idx = log_return_vec.begin() + 350; std::vector<double> calibration_vec(log_return_vec.begin(), split_idx); std::vector<double> out_of_sample_vec(split_idx, log_return_vec.end())`.
+  - Six exceedance frequencies printed alongside expected target rates with stream formatting.
+  - Output: historical 4.6%/1.2%; parametric 6.2%/1.2%; MC 6.2%/1.2%. Zero warnings under `-Wall -Wextra -std=c++20`.
+  - Conceptual: fat-tails mechanism — parametric threshold is not negative enough (normal underestimates left tail) → more out-of-sample days exceed it. Historical threshold anchored to calibration window extremes → if calibration was more volatile than test window, threshold is too conservative → fewer exceedances.
+  - Bugs caught: exceedance direction (`r >` → `r <`); integer division truncation; pass by value → const ref; iterator off-by-one (`begin()+349` → `begin()+350`); header/definition mismatch; stream state stickiness.
 
 - **W8 Day 3 wins:**
   - GBM formula carry-forward (due 2026-05-23): 2/2 unaided on first attempt — S_next = S_current × e^((r − σ²/2)×dt + σ×√dt×Z). **[FIRST TIME]** clean unaided; scored 1/2 yesterday. Carry-forward cleared.
@@ -363,6 +371,11 @@
 | 2026-05-22 | 99% VaR index in 500 sorted returns | 2/2 unaided — index 4, 5 observations. | — |
 | 2026-05-22 | `>>` vs `getline` — closing retrieval check | 2/2 unaided — "`getline` uses `\n`, `>>` uses all whitespace; `>>` fragments the row, `getline` hands you the whole row." **[FIRST TIME]** fully unaided; was 1/2 at session open. | — |
 
+| 2026-05-24 | `break`/`continue` mechanics — closing retrieval check | 2/2 unaided — "skips the rest of the current iteration and jumps directly to the next one." Precise form stated unprompted. Improvement from 1.5/2 at session open. | — |
+| 2026-05-24 | `break`/`continue` mechanics — opening spaced rep (due 2026-05-25) | 1.5/2 — `break` correct; `continue` definition vague ("code below it" vs "rest of current iteration"); CSV use-case reasoning 2/2 | — |
+| 2026-05-24 | Empirical exceedance frequency — definition + out-of-sample circularity carry-forward (due today) | 2/2 unaided — definition precise; circularity reasoning stated unprompted ("circular because trivial — historical VaR by construction produces exactly target frequency on its own data"). **[FIRST TIME]** clean unaided. **Carry-forward cleared.** | — |
+| 2026-05-24 | Why parametric VaR overshoots 5% exceedance on out-of-sample (fat tails) | 0/2 initially ("no idea"); correct after full explanation. Threshold too shallow because normal distribution underestimates left-tail frequency. | 2026-05-25 |
+| 2026-05-24 | Two reasons: parametric overshoots (thin-tail assumption) + historical undershoots (calibration-window anchoring) | 1/2 — parametric side unaided; historical side needed one coaching question ("what is historical VaR entirely dependent on?"). | 2026-05-25 |
 | 2026-05-24 | GBM formula — opening carry-forward (σ²/2 notation, due 2026-05-23) | 2/2 unaided — S_next = S_current × e^((r−σ²/2)×dt + σ×√dt×Z). **[FIRST TIME]** clean unaided after 1/2 yesterday. Carry-forward cleared. | — |
 | 2026-05-24 | GBM formula — closing retrieval check (same question) | 2/2 unaided — drift (r−σ²/2)×dt and shock σ×√dt×Z both correct; σ²/2 notation clean. Outer e^(...) structure implicit but terms correct. | — |
 | 2026-05-22 | GBM formula — drift + shock notation (W6 spaced rep, overdue 2026-05-20) | 1/2 — wrote (σ/2)² not σ²/2; self-corrected after "expand that algebraically" coaching step. | 2026-05-23 |

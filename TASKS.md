@@ -6,12 +6,14 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-- **W8 Day 4 (2h)** — Implement out-of-sample exceedance frequency check in `var_model.cpp`; compile and confirm all three VaR outputs still match W8 D2 values. Retrieval question first: "What is empirical exceedance frequency — define it precisely and explain why testing it on out-of-sample data is required."
+- **W8 Day 5 (1h)** — Add assert-based acceptance checks to `var_model.cpp` (99% VaR > 95% VaR in magnitude; exceedance rates in [0%, 15%]); compile clean; write Week 8 retrospective in `templates/retrospective-template.md`. Retrieval question first: "Parametric VaR produced 6.2% exceedance (expected 5%), historical produced 4.6% — give the distinct reason for each."
 
 ## Next (queued, ordered)
-- **W8 Day 5 (1h)** — Acceptance test run, retrospective (Milestone 2).
+- **W9 Day 1 (2h)** — STL containers concept intro: `std::map` vs `std::unordered_map`, iterators, lambdas. First exercise: OHLC bar aggregator spec.
 
 ## Done
+
+- **2026-05-24 — W8 Day 4: exceedance_frequency implemented + wired into main.** `exceedance_frequency(const std::vector<double>&, double) → double` added to var_model.h/cpp. `main()` split into calibration (350 returns, 70%) and out-of-sample windows via iterator arithmetic. All three VaR methods computed on calibration data; exceedance frequencies printed alongside expected target rates using `std::fixed`/`std::setprecision(1)` with correct stream-state resets. Clean compile, zero warnings. Bugs caught: exceedance direction (`r >` → `r <`); integer division truncation (`int/int` → `static_cast<double>(count)/total`); pass by value → `const std::vector<double>&`; off-by-one in iterator range (`begin()+349` → `begin()+350`); header/definition signature mismatch; sticky stream state (`std::defaultfloat + std::setprecision(6)` reset). Output: historical 4.6%/1.2%, parametric 6.2%/1.2%, MC 6.2%/1.2%. Artifact: [notes/w8_d4.md](notes/w8_d4.md).
 
 - **2026-05-24 — W8 Day 3: Code review complete.** GBM formula carry-forward cleared (2/2 unaided). All blocking issues fixed: `load_prices` file-open guard (`cerr + assert(false)` before first `getline`); index arithmetic fixed in `historical_VaR` and `monte_carlo_VaR` (`static_cast<int>` into signed `n`, `assert(idx >= 0)`). Non-blocking fixes: parameter renamed, C-style casts removed, output formatting improved. Empirical exceedance frequency concept introduced (out-of-sample requirement understood conceptually). Artifact: [notes/w8_d3.md](notes/w8_d3.md).
 
