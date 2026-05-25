@@ -99,7 +99,9 @@ After meaningful work within a session:
 - If you assumed something the user hasn't confirmed, log it in [ASSUMPTIONS.md](ASSUMPTIONS.md).
 - If you cited a "fact" you couldn't verify, queue it in [REFERENCE_RESEARCH_QUEUE.md](REFERENCE_RESEARCH_QUEUE.md).
 
-**Do not** write session notes, update PROGRESS.md, update TASKS.md, or push to git mid-session. Those steps happen only when the user runs `/end`. If the session ends without `/end`, nothing is written or pushed.
+**Do not** write session notes, update PROGRESS_ACTIVE.md, update TASKS.md, or push to git mid-session. Those steps happen only when the user runs `/end`. If the session ends without `/end`, nothing is written or pushed.
+
+**Do not** write directly to PROGRESS.md (deprecated). Write active state to [PROGRESS_ACTIVE.md](PROGRESS_ACTIVE.md) (≤40 lines, session-start file) and append detailed history to [PROGRESS_HISTORY.md](PROGRESS_HISTORY.md) (append-only archive, never read at session start).
 
 ## 13. When in doubt
 

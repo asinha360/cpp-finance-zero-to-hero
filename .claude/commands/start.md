@@ -2,9 +2,8 @@ Fresh session. Read these files in order, then stop and confirm:
 
 1. CONTEXT.md — who I am, what we're building
 2. CLAUDE.md — operating rules (note section 2 for my working style)
-3. PROGRESS.md — exactly where I am right now
+3. PROGRESS_ACTIVE.md — exactly where I am right now
 4. curriculum.md — the plan
-5. setup.md — verify my environment is ready
 
 After reading, output a 5-line orientation:
 - Current week & day

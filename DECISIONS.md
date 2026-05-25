@@ -144,3 +144,19 @@ Non-trivial choices, one entry each. Date, decision, reason, what would flip it.
 ---
 
 **Explicitly deferred / rejected.** Full Xcode IDE, GCC via Homebrew, Conan/vcpkg, Docker, valgrind — reasons noted in [setup.md](setup.md) "Deliberately omitted" section.
+
+---
+
+## 2026-05-25 — Context bloat reduction: PROGRESS.md split into ACTIVE + HISTORY
+
+**Context.** Session-start token cost was growing unsustainably: `PROGRESS.md` (401 lines, ~9,000 tokens) and `setup.md` (310 lines, ~4,500 tokens) were read in full every session by the `/start` skill. `PROGRESS.md` was on track to exceed 1,000 lines by W16. Combined waste: ~13,500 tokens per session, ~65% of total session-start cost.
+
+**Decision.** Split `PROGRESS.md` into two files:
+- `PROGRESS_ACTIVE.md` (≤40-line cap) — session-start file; contains current state, next-session block, open retrieval gaps, milestone checklist only.
+- `PROGRESS_HISTORY.md` (append-only archive) — full session log, retrieval scores table, week-by-week ledger; never read at session start.
+
+Remove `setup.md` from the `/start` skill read list (one-time install guide; no session-relevant state after W1).
+
+**Deferred.** Graphify (github.com/safishamsi/graphify) — a Claude Code skill that indexes a repo into a queryable knowledge graph — was evaluated and is the right tool for W12+ when three full artifacts exist. Not worth the setup complexity now; current token problem is a file-organisation problem, not a code-indexing problem.
+
+**What would flip it.** If `PROGRESS_ACTIVE.md` consistently overflows the 40-line cap despite the `/end` overflow rule, revisit the cap or consider Graphify earlier. If retrieval gaps from 2+ weeks ago need to be visible during session start (e.g., a re-test schedule spanning many weeks), add a `## Scheduled re-tests` section or expand the cap.
