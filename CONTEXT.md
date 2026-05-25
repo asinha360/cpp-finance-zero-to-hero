@@ -26,9 +26,9 @@ a written reflection. Claude is my coach, code reviewer, and curriculum designer
 - Throughout: I can explain WHY each line exists, not just paste code.
 
 ## Current priorities
-1. Complete Week 5 — memory model, pointers vs. references, first RNG harness.
-2. Reach Milestone 2 (Week 8) — Monte Carlo VaR model on real historical data.
-3. Keep spaced-retrieval cadence: re-test W1–W4 concepts at scheduled intervals alongside new material.
+1. Complete Week 9 — STL containers + algorithms; OHLC bar aggregator. Schedule a dedicated concept-review session (σ asymmetry, historical VaR exceedance mechanism) before Day 3.
+2. Reach Milestone 3 (Week 12) — order-book replay backtester.
+3. Keep spaced-retrieval cadence: re-test W1–W8 concepts at scheduled intervals alongside new material.
 
 ## What to avoid
 - Tutorials that have me copy-paste without understanding.

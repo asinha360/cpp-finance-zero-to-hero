@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
-#include <cassert>
 #include <algorithm>
 #include <utility>
 #include <iomanip>
+#include <cassert>
 #include "var_model.h"
 #include "normal_sampler.h"
 #include "csv_loader.h"
@@ -88,8 +88,11 @@ int main(){
     std::pair<double, double> mc_VaR_pair = monte_carlo_VaR(mean_val, std_dev_val, 100000, 123);
 
     auto [hvar95, hvar99] = hist_VaR_pair;
+    assert(hvar95 > hvar99);
     double hist_ex_freq_95 = exceedance_frequency(out_of_sample_vec, hvar95);
     double hist_ex_freq_99 = exceedance_frequency(out_of_sample_vec, hvar99);
+    assert(hist_ex_freq_95 >= 0.0 && hist_ex_freq_95 < 0.15);
+    assert(hist_ex_freq_99 >= 0.0 && hist_ex_freq_99 < 0.15);
     std::cout << "The Historical Simulation VaRs are: " << "\n";
     std::cout << "95% VaR: " << hvar95 << "  ||  " << "99% VaR: " << hvar99 << "\n";
     std::cout << "95% VaR exceedance (expected 5.0%): " << std::fixed << std::setprecision(1) << hist_ex_freq_95 * 100 << " %" << "\n";
@@ -97,8 +100,11 @@ int main(){
     std::cout << std::defaultfloat << std::setprecision(6);
     
     auto [pvar95, pvar99] = para_VaR_pair;
+    assert(pvar95 > pvar99);
     double para_ex_freq_95 = exceedance_frequency(out_of_sample_vec, pvar95);
     double para_ex_freq_99 = exceedance_frequency(out_of_sample_vec, pvar99);
+    assert(para_ex_freq_95 >= 0.0 && para_ex_freq_95 < 0.15);
+    assert(para_ex_freq_99 >= 0.0 && para_ex_freq_99 < 0.15);
     std::cout << "The Parametric Simulation VaRs are: " << "\n";
     std::cout << "95% VaR: " << pvar95 << "  ||  " << "99% VaR: " << pvar99 << "\n";
     std::cout << "95% VaR exceedance (expected 5.0%): " << std::fixed << std::setprecision(1) << para_ex_freq_95 * 100 << " %" << "\n";
@@ -106,8 +112,11 @@ int main(){
     std::cout << std::defaultfloat << std::setprecision(6);
 
     auto [mcvar95, mcvar99] = mc_VaR_pair;
+    assert(mcvar95 > mcvar99);
     double mc_ex_freq_95 = exceedance_frequency(out_of_sample_vec, mcvar95);
     double mc_ex_freq_99 = exceedance_frequency(out_of_sample_vec, mcvar99);
+    assert(mc_ex_freq_95 >= 0.0 && mc_ex_freq_95 < 0.15);
+    assert(mc_ex_freq_99 >= 0.0 && mc_ex_freq_99 < 0.15);
     std::cout << "The Monte Carlo Simulation VaRs are: " << "\n";
     std::cout << "95% VaR: " << mcvar95 << "  ||  " << "99% VaR: " << mcvar99 << "\n";
     std::cout << "95% VaR exceedance (expected 5.0%): " << std::fixed << std::setprecision(1) << mc_ex_freq_95 * 100 << " %" << "\n";

@@ -93,13 +93,13 @@ See [examples/good-output-examples.md](examples/good-output-examples.md) and [ex
 
 ## 12. Logging your work
 
-After meaningful work:
+After meaningful work within a session:
 
-- Update [TASKS.md](TASKS.md) (move items between sections).
 - If you made a non-trivial choice, log it in [DECISIONS.md](DECISIONS.md).
 - If you assumed something the user hasn't confirmed, log it in [ASSUMPTIONS.md](ASSUMPTIONS.md).
 - If you cited a "fact" you couldn't verify, queue it in [REFERENCE_RESEARCH_QUEUE.md](REFERENCE_RESEARCH_QUEUE.md).
-- After every learning session, update [PROGRESS.md](PROGRESS.md): current week, status, today's artifact, retrieval scores. If we slipped vs. schedule, log the reason in [ASSUMPTIONS.md](ASSUMPTIONS.md) or [DECISIONS.md](DECISIONS.md).
+
+**Do not** write session notes, update PROGRESS.md, update TASKS.md, or push to git mid-session. Those steps happen only when the user runs `/end`. If the session ends without `/end`, nothing is written or pushed.
 
 ## 13. When in doubt
 

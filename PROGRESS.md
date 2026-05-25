@@ -3,18 +3,26 @@
 ## Current state
 ## Next session
 
-**First action:** W8 Day 5 — add assert-based acceptance checks to `var_model.cpp` (99% VaR > 95% VaR in magnitude; exceedance rates in [0%, 15%]); compile clean; write Week 8 retrospective.
+**First action:** W9 Day 1 — STL containers concept intro (`std::map` vs `std::unordered_map`, iterators, lambdas); open with historical VaR exceedance retrieval before any new material.
 **Retrieval question:** Parametric VaR produced 6.2% exceedance (expected 5%), historical produced 4.6% — give the distinct reason for each.
-**Carry-forwards:** parametric vs historical exceedance divergence (historical calibration-anchoring side needed one coaching question); `break`/`continue` continue-definition precision (due 2026-05-25)
+**Carry-forwards:** historical VaR exceedance mechanism (0/2 today, 3 coaching passes — same gap as W8D4; carry-forward until 2/2 unaided); concept review session before W9D3 (σ asymmetry, historical VaR calibration-anchoring, parametric thin-tail threshold)
 
 ---
 
-- **Today's date:** 2026-05-24
-- **Curriculum week:** 8 of 16 — **In Progress**
-- **Days into curriculum:** 19 (calendar) / 33 sessions complete
+- **Today's date:** 2026-05-25
+- **Curriculum week:** 9 of 16 — **Not Started** (Week 8 complete as of 2026-05-25)
+- **Days into curriculum:** 19 (calendar) / 34 sessions complete
 - **Schedule status:** On track
-- **Next milestone:** Week 8 — Monte Carlo VaR on real historical data
-- **Today's artifact:** [notes/w8_d4.md](notes/w8_d4.md)
+- **Next milestone:** Week 12 — Order-book replay backtester
+- **Today's artifact:** [notes/w8_d5.md](notes/w8_d5.md)
+
+- **W8 Day 5 wins:**
+  - Nine assert-based acceptance checks added to `var_model.cpp`: magnitude ordering (`hvar95 > hvar99`, `pvar95 > pvar99`, `mcvar95 > mcvar99`) and exceedance rates `>= 0.0 && < 0.15` for all six variables. All 9 passed silently on first compile. **Week 8 / Milestone 2 closed.**
+  - Retrospective written at [projects/week08/retrospective.md](projects/week08/retrospective.md). README and CONTEXT.md updated.
+  - Bugs caught: chained comparison (`0 < x < 15` always evaluates true in C++ via left-to-right `bool` arithmetic); units mismatch (`15` vs `0.15` for ratio exceedance variable); duplicate `#include <cassert>` at lines 3 and 7.
+  - `continue` exact definition: 2/2 unaided at both opening and closing. **Carry-forward cleared.**
+  - Parametric VaR exceedance reason: 1/2 — direction correct (fat tails → threshold too shallow), but mechanism stated as "events closer to the mean" rather than "threshold set too shallow by thin-tail assumption."
+  - Historical VaR exceedance reason: 0/2 opening; reached clean mechanism after 3 coaching passes. Same persistent gap as W8D4. Carry-forward to W9D1.
 
 - **W8 Day 4 wins:**
   - `exceedance_frequency(const std::vector<double>&, double) → double` implemented and declared. Correct condition (`r < var_threshold`), correct division (`static_cast<double>(count) / total`), correct parameter type (`const std::vector<double>&`).
@@ -221,7 +229,7 @@
 | 5 | Memory model + first RNG; normal RNG harness | **Complete** | 2026-05-07 | 2026-05-11 | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | [projects/week05/retrospective.md](projects/week05/retrospective.md) |
 | 6 | Classes + RAII; GBM MC option pricer | **Complete** | 2026-05-11 | 2026-05-14 | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | [projects/week06/retrospective.md](projects/week06/retrospective.md) |
 | 7 | File I/O; CSV loader + returns summary | **Complete** | 2026-05-18 | 2026-05-21 | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | [projects/week07/retrospective.md](projects/week07/retrospective.md) |
-| 8 | **MILESTONE 2** — Monte Carlo VaR on real data | In Progress | 2026-05-22 | — | [projects/week08/var_model.cpp](projects/week08/var_model.cpp) | — |
+| 8 | **MILESTONE 2** — Monte Carlo VaR on real data | **Complete** | 2026-05-22 | 2026-05-25 | [projects/week08/var_model.cpp](projects/week08/var_model.cpp) | [projects/week08/retrospective.md](projects/week08/retrospective.md) |
 | 9 | STL containers + algorithms; OHLC bar aggregator | Not started | — | — | — | — |
 | 10 | Polymorphism; SMA-crossover strategy | Not started | — | — | — | — |
 | 11 | Limit order book with matching | Not started | — | — | — | — |
@@ -234,7 +242,7 @@
 ## Milestones (from [CONTEXT.md](CONTEXT.md) success criteria)
 - [x] Week 4 — Black-Scholes pricer from scratch
 - [x] Week 7 — CSV loader with File I/O (prerequisite for Milestone 2)
-- [ ] Week 8 — Monte Carlo VaR on real data
+- [x] Week 8 — Monte Carlo VaR on real data
 - [ ] Week 12 — Order-book replay backtester
 - [ ] Week 16 — 3 portfolio projects on GitHub
 
@@ -372,6 +380,12 @@
 | 2026-05-22 | `>>` vs `getline` — closing retrieval check | 2/2 unaided — "`getline` uses `\n`, `>>` uses all whitespace; `>>` fragments the row, `getline` hands you the whole row." **[FIRST TIME]** fully unaided; was 1/2 at session open. | — |
 
 | 2026-05-24 | `break`/`continue` mechanics — closing retrieval check | 2/2 unaided — "skips the rest of the current iteration and jumps directly to the next one." Precise form stated unprompted. Improvement from 1.5/2 at session open. | — |
+
+| 2026-05-25 | `continue` exact definition — opening spaced-rep (due today) | 2/2 unaided — "skips the rest of the current iteration and jumps to the next one." Carry-forward cleared. | — |
+| 2026-05-25 | Parametric VaR exceedance reason — opening retrieval | 1/2 — direction correct (fat tails → threshold too shallow); mechanism muddled ("events closer to mean" vs "threshold set too shallow by thin-tail assumption") | 2026-05-26 |
+| 2026-05-25 | Historical VaR exceedance reason — opening retrieval | 0/2 — said "overstate exceedance"; needed 3 coaching passes (direction correction; calibration-vs-out-of-sample volatility comparison; two-step chain). Same gap as W8D4. | 2026-05-26 |
+| 2026-05-25 | `continue` exact definition — closing spaced-rep | 2/2 unaided — "skips remaining current iteration to the next one." | — |
+| 2026-05-25 | Closing retrieval — parametric + historical exceedance divergence | 1/2 — both directions correct; parametric named thin-tail assumption but skipped threshold-placement mechanism; historical got calibration anchoring but missed the calibration-more-volatile-than-out-of-sample comparison that determines direction | 2026-05-26 |
 | 2026-05-24 | `break`/`continue` mechanics — opening spaced rep (due 2026-05-25) | 1.5/2 — `break` correct; `continue` definition vague ("code below it" vs "rest of current iteration"); CSV use-case reasoning 2/2 | — |
 | 2026-05-24 | Empirical exceedance frequency — definition + out-of-sample circularity carry-forward (due today) | 2/2 unaided — definition precise; circularity reasoning stated unprompted ("circular because trivial — historical VaR by construction produces exactly target frequency on its own data"). **[FIRST TIME]** clean unaided. **Carry-forward cleared.** | — |
 | 2026-05-24 | Why parametric VaR overshoots 5% exceedance on out-of-sample (fat tails) | 0/2 initially ("no idea"); correct after full explanation. Threshold too shallow because normal distribution underestimates left-tail frequency. | 2026-05-25 |

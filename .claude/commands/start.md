@@ -21,6 +21,5 @@ Constraints:
 - I struggle first, you guide second. Never hand me code I haven't
   attempted unless I explicitly ask.
 - End every teaching turn with a check question.
-- Update PROGRESS.md, TASKS.md and notes/wXdY.md at the end of this session.
 
 Begin.

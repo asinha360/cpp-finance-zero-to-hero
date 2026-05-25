@@ -12,7 +12,7 @@ By week 16: three polished GitHub portfolio projects demonstrating pricing, risk
 
 By week 4 (complete): write, compile, and debug a Black-Scholes pricer from scratch.
 
-By week 8 (in progress): build a Monte Carlo VaR model on real historical data.
+By week 8 (complete): build a Monte Carlo VaR model on real historical data.
 
 ---
 
@@ -27,7 +27,7 @@ By week 8 (in progress): build a Monte Carlo VaR model on real historical data.
 | 5 | Memory model (stack/heap, pointers, references); normal RNG harness | [projects/week05/rng_harness.cpp](projects/week05/rng_harness.cpp) | Complete |
 | 6 | Classes + RAII; GBM Monte Carlo option pricer | [projects/week06/mc_pricer.h](projects/week06/mc_pricer.h) | Complete |
 | 7 | File I/O; CSV loader + returns summary | [projects/week07/csv_loader.cpp](projects/week07/csv_loader.cpp) | Complete |
-| 8 | **Milestone 2** — Monte Carlo VaR on real historical data | [projects/week08/var_model.cpp](projects/week08/var_model.cpp) | In progress |
+| 8 | **Milestone 2** — Monte Carlo VaR on real historical data | [projects/week08/var_model.cpp](projects/week08/var_model.cpp) | Complete |
 | 9 | STL containers + algorithms; OHLC bar aggregator | — | Not started |
 | 10 | Polymorphism; SMA-crossover strategy | — | Not started |
 | 11 | Limit order book with matching engine | — | Not started |
@@ -92,7 +92,7 @@ Reads a CSV of `date,price` rows from disk, skips malformed rows (missing comma,
 
 Output verified against a Python reference to 7 significant figures (mean 0.000932505, stdev 0.0143042). Zero warnings under `-Wall -Wextra -std=c++20`.
 
-### Week 8 — Monte Carlo VaR model (Milestone 2, in progress)
+### Week 8 — Monte Carlo VaR model (Milestone 2)
 `projects/week08/var_model.cpp` / `var_model.h`, `csv_loader.h/.cpp`, `normal_sampler.h`
 
 Three-method VaR (Value at Risk) implementation on real historical price data. VaR answers: "what is the minimum loss that will be exceeded only X% of the time?"
@@ -101,9 +101,27 @@ Three-method VaR (Value at Risk) implementation on real historical price data. V
 - **Parametric VaR** — models returns as N(μ, σ) and computes μ + z·σ where z = −1.645 (95%) or −2.326 (99%). Closed-form; underestimates tail risk for real equity data because equity returns have fat tails.
 - **Monte Carlo VaR** — draws 100,000 samples from N(μ, σ) using the `NormalSampler` from Week 6, sorts, reads off percentile index.
 
-Results at 95%/99%: historical −0.0256/−0.0357; parametric −0.0254/−0.0359; Monte Carlo −0.0254/−0.0359. All three methods agree at 95%; the historical method diverges at 99% (fat tails visible). Zero warnings under `-Wall -Wextra -std=c++20`.
+Calibrated on 350 returns (70%); tested on the remaining 150 out-of-sample returns.
 
-Defensive guards (added in code review): `load_prices` asserts on file-open failure before any stream reads, with the actual filepath in the error message; VaR index arithmetic uses signed `int` (not `size_t`) to prevent unsigned wrap on small inputs.
+**Calibration-window VaR thresholds at 95%/99%:**
+| Method | 95% VaR | 99% VaR |
+|---|---|---|
+| Historical | −0.02591 | −0.03470 |
+| Parametric | −0.02390 | −0.03431 |
+| Monte Carlo | −0.02390 | −0.03438 |
+
+**Out-of-sample exceedance frequencies (target: 5.0% / 1.0%):**
+| Method | 95% | 99% |
+|---|---|---|
+| Historical | 4.6% | 1.2% |
+| Parametric | 6.2% | 1.2% |
+| Monte Carlo | 6.2% | 1.2% |
+
+Parametric overshoots at 95% (fat tails — normal distribution sets the threshold too shallow). Historical undershoots at 95% (calibration window was more volatile than the test window; threshold is too conservative).
+
+Acceptance tests (assert-based): 99% VaR more negative than 95% VaR for all three methods ✓; all exceedance rates within [0%, 15%] ✓. Zero warnings under `-Wall -Wextra -std=c++20`.
+
+Defensive guards (added in code review): `load_prices` asserts on file-open failure before any stream reads with the actual filepath in the error message; VaR index arithmetic uses signed `int` (not `size_t`) to prevent unsigned wrap on small inputs.
 
 ---
 

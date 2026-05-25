@@ -6,12 +6,14 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-- **W8 Day 5 (1h)** — Add assert-based acceptance checks to `var_model.cpp` (99% VaR > 95% VaR in magnitude; exceedance rates in [0%, 15%]); compile clean; write Week 8 retrospective in `templates/retrospective-template.md`. Retrieval question first: "Parametric VaR produced 6.2% exceedance (expected 5%), historical produced 4.6% — give the distinct reason for each."
+- **W9 Day 1 (2h)** — STL containers concept intro: `std::map` vs `std::unordered_map`, iterators, lambdas. First exercise: OHLC bar aggregator spec. Open with historical VaR exceedance retrieval before any new material.
 
 ## Next (queued, ordered)
-- **W9 Day 1 (2h)** — STL containers concept intro: `std::map` vs `std::unordered_map`, iterators, lambdas. First exercise: OHLC bar aggregator spec.
+- **Concept review session (1h)** — Dedicated retrieval practice on persistent gaps before W9D3: historical VaR exceedance mechanism (calibration-anchoring direction), σ asymmetry full mechanism, parametric thin-tail threshold argument.
 
 ## Done
+
+- **2026-05-25 — W8 Day 5: acceptance tests green + retrospective written. Week 8 / Milestone 2 complete.** Nine assert-based checks added to `var_model.cpp`: magnitude ordering (99% VaR more negative than 95% VaR) for all three methods; exceedance rates in [0%, 15%] for all six variables. All 9 passed silently. Bugs caught: chained comparison (`0 < x < 15` always true in C++); units mismatch (`15` vs `0.15` for ratio variable); duplicate `#include <cassert>` removed. Retrospective written at [projects/week08/retrospective.md](projects/week08/retrospective.md). README and CONTEXT.md updated to reflect Milestone 2 complete. Artifact: [notes/w8_d5.md](notes/w8_d5.md).
 
 - **2026-05-24 — W8 Day 4: exceedance_frequency implemented + wired into main.** `exceedance_frequency(const std::vector<double>&, double) → double` added to var_model.h/cpp. `main()` split into calibration (350 returns, 70%) and out-of-sample windows via iterator arithmetic. All three VaR methods computed on calibration data; exceedance frequencies printed alongside expected target rates using `std::fixed`/`std::setprecision(1)` with correct stream-state resets. Clean compile, zero warnings. Bugs caught: exceedance direction (`r >` → `r <`); integer division truncation (`int/int` → `static_cast<double>(count)/total`); pass by value → `const std::vector<double>&`; off-by-one in iterator range (`begin()+349` → `begin()+350`); header/definition signature mismatch; sticky stream state (`std::defaultfloat + std::setprecision(6)` reset). Output: historical 4.6%/1.2%, parametric 6.2%/1.2%, MC 6.2%/1.2%. Artifact: [notes/w8_d4.md](notes/w8_d4.md).
 
