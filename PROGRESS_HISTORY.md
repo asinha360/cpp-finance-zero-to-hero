@@ -1,7 +1,25 @@
-# PROGRESS.md
+# PROGRESS_HISTORY.md — Append-only archive
 
-## Current state
-## Next session
+## Session 2026-06-01 (W9 D1)
+
+**Retrieval scores:**
+| Prompt | Topic | Score |
+|--------|-------|-------|
+| Opening | Parametric VaR exceedance mechanism | 2/2 — direction and mechanism correct unaided |
+| Opening | Historical VaR exceedance mechanism | 1/2 — direction inverted initially; corrected after one thought-experiment hint |
+| Closing | `std::map` ordering / Big O | 1/2 — correct conclusion; O(log n) vs O(1) terminology conflated |
+| End-of-session | Historical VaR exceedance mechanism | 2/2 — direction and mechanism correct unaided; gap closed |
+| End-of-session | Parametric VaR exceedance mechanism | not attempted (skipped); gap remains closed from earlier 2/2 |
+
+**Session wins:**
+- Parametric VaR exceedance mechanism: 2/2 unaided for the first time (was 1/2 at W8D5). Carry-forward closed.
+- Historical VaR exceedance mechanism improved to 1/2 (from 0/2 across 3 passes at W8D5). Direction now understood.
+- **[FIRST TIME]** `struct OHLCBar` — first struct in the curriculum; public-by-default semantics understood.
+- **[FIRST TIME]** Positional vs associative indexing distinction stated cleanly: "bars[571] means the bar labelled 571, not the 572nd element."
+- Per-tick update block (`auto it = bars.find(minute)` + if/else with aggregate init + `std::max`/`std::min` + `close = price`) written correctly after ~4 coaching passes.
+- Close = last tick price rationale understood: "the last agreed price is what participants act on at the start of the next period."
+
+---
 
 **First action:** W9 Day 1 — STL containers concept intro (`std::map` vs `std::unordered_map`, iterators, lambdas); open with historical VaR exceedance retrieval before any new material.
 **Retrieval question:** Parametric VaR produced 6.2% exceedance (expected 5%), historical produced 4.6% — give the distinct reason for each.

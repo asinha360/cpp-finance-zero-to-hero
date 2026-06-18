@@ -143,6 +143,31 @@ Non-trivial choices, one entry each. Date, decision, reason, what would flip it.
 
 ---
 
+## 2026-06-01 — First-tick initialization: `.find()` check vs sentinel constructor
+
+**Context.** W9 Day 1: `std::map<int, OHLCBar>` auto-creates a default `OHLCBar{0,0,0,0}` when `operator[]` is called with a new key. This is safe for `close` (will be overwritten) but wrong for `high` (0.0 is not the lowest possible price), `low` (0.0 is not the highest possible price), and `open` (should be the first tick's price, not 0.0).
+
+**Options considered:**
+
+1. **Sentinel constructor.** Give `OHLCBar` a constructor that sets `high = std::numeric_limits<double>::lowest()` and `low = std::numeric_limits<double>::max()`. `operator[]` auto-creates with correct sentinel defaults; every subsequent tick just runs `std::max`/`std::min`. Open still needs special handling.
+2. **`.find()` check on every tick.** Use `bars.find(minute) == bars.end()` to detect the first tick; initialize all four fields to the tick price; update `high`, `low`, `close` on subsequent ticks. Bypasses `operator[]` auto-creation.
+
+**Decision.** Use `.find()` approach (option 2).
+
+**Reasoning:**
+- `open` must equal the first tick's price — neither a sentinel nor 0.0. Since a first-tick check is unavoidable for `open`, option 2 does not add any extra logic.
+- Option 1 requires a constructor (new C++ concept at W9 for a struct) plus separate `open` logic — more moving parts for no benefit.
+- `.find()` makes the first-tick vs subsequent-tick distinction explicit in the code, which is more readable.
+
+**Consequences:**
+- Good: no sentinels needed; logic is explicit; no accidental `operator[]` side-effects.
+- Bad: `.find()` called on every tick rather than relying on auto-creation.
+- Reversibility: cheap — switch to sentinel constructor at W12 if OHLCBar needs a constructor for other reasons anyway.
+
+**Review date:** 2026-12-01
+
+---
+
 **Explicitly deferred / rejected.** Full Xcode IDE, GCC via Homebrew, Conan/vcpkg, Docker, valgrind — reasons noted in [setup.md](setup.md) "Deliberately omitted" section.
 
 ---

@@ -6,12 +6,14 @@ Living task board. Move items between sections as they progress. See [WORKFLOW.m
 
 ## Now (actively working)
 
-- **W9 Day 1 (2h)** — STL containers concept intro: `std::map` vs `std::unordered_map`, iterators, lambdas. First exercise: OHLC bar aggregator spec. Open with historical VaR exceedance retrieval before any new material.
+- **W9 Day 2 (2h)** — Solo implementation: create `ohlc_bar.cpp`, write `struct OHLCBar` and `std::map<int, OHLCBar> bars;` from memory, implement per-tick update block. No Claude code until a first attempt is on the page.
 
 ## Next (queued, ordered)
-- **Concept review session (1h)** — Dedicated retrieval practice on persistent gaps before W9D3: historical VaR exceedance mechanism (calibration-anchoring direction), σ asymmetry full mechanism, parametric thin-tail threshold argument.
+- **W9 Day 3 (1h)** — Retrieval practice (closed-book) + concept review on remaining gaps: historical VaR exceedance mechanism (needs one more unaided pass), σ asymmetry full mechanism, `std::map` Big O terminology (O(log n) vs O(1) conflated).
 
 ## Done
+
+- **2026-06-01 — W9 Day 1: STL containers concept intro complete.** `std::map` vs `std::unordered_map` tradeoffs; `struct OHLCBar` written; `std::map<int, OHLCBar>` declared; per-tick update block (`.find()`, aggregate init, `std::max`/`std::min`, `close` overwrite) written correctly. Both W8 carry-forward retrieval gaps resolved: parametric VaR 2/2 unaided, historical VaR 1/2 (one coaching pass). Artifact: [notes/w9_d1.md](notes/w9_d1.md).
 
 - **2026-05-25 — W8 Day 5: acceptance tests green + retrospective written. Week 8 / Milestone 2 complete.** Nine assert-based checks added to `var_model.cpp`: magnitude ordering (99% VaR more negative than 95% VaR) for all three methods; exceedance rates in [0%, 15%] for all six variables. All 9 passed silently. Bugs caught: chained comparison (`0 < x < 15` always true in C++); units mismatch (`15` vs `0.15` for ratio variable); duplicate `#include <cassert>` removed. Retrospective written at [projects/week08/retrospective.md](projects/week08/retrospective.md). README and CONTEXT.md updated to reflect Milestone 2 complete. Artifact: [notes/w8_d5.md](notes/w8_d5.md).
 
